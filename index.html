@@ -347,10 +347,14 @@
   const libLabel     = document.getElementById('libLabel');
   const fileInput    = document.getElementById('fileInput');
 
-  let tracks = [
-  { name: "Heavy Serenade", artist: "엔믹스", url: "https://res.cloudinary.com/dhgv4vln9/video/upload/v1780227297/songs_song1_rpxlmj.mp3" },
-  { name: "나의x에게",   artist: "경서", url: "https://res.cloudinary.com/dhgv4vln9/video/upload/v1780233828/%EA%B2%BD%EC%84%9C_-_%EB%82%98%EC%9D%98_X%EC%97%90%EA%B2%8C_%EA%B0%80%EC%82%ACLyrics_qnyvvv.mp3" }
-];
+  let tracks = [];
+
+fetch('./songs.json')
+  .then(res => res.json())
+  .then(data => {
+    tracks = data;
+    renderList();
+  });
   let currentIdx   = -1;
   let isPlaying    = false;
   let isShuffle    = false;
