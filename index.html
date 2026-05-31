@@ -36,7 +36,9 @@
     padding: 40px 24px 16px;
     background: linear-gradient(to bottom, var(--bg-main) 70%, transparent);
   }
-  .header-inner { display: flex; flex-direction: column; gap: 2px; }
+  .header-inner {
+    display: flex; align-items: center; justify-content: space-between;
+  }
   .header-inner h1 {
     font-family: 'Plus Jakarta Sans', sans-serif;
     font-size: 24px; font-weight: 700; letter-spacing: -0.3px;
@@ -44,12 +46,24 @@
   }
   .header-inner p {
     font-size: 12px; font-weight: 500; color: var(--text-muted);
-    letter-spacing: 0.03em;
+    margin-top: 2px;
   }
+
+  .upload-btn {
+    display: flex; align-items: center; gap: 6px;
+    background: none; border: 1px solid #535353; color: #fff;
+    padding: 6px 16px; border-radius: 20px;
+    font-size: 13px; font-weight: 600; cursor: pointer;
+    font-family: inherit; flex-shrink: 0;
+    -webkit-tap-highlight-color: transparent;
+    transition: border-color 0.15s, background 0.15s;
+  }
+  .upload-btn:hover { border-color: #fff; background: rgba(255,255,255,0.06); }
+  #fileInput { display: none; }
 
   main {
     position: fixed; inset: 0; overflow-y: auto;
-    padding-top: 100px; padding-bottom: 210px;
+    padding-top: 100px; padding-bottom: 220px;
     padding-left: 16px; padding-right: 16px;
     -webkit-overflow-scrolling: touch; z-index: 1;
   }
@@ -59,12 +73,11 @@
   .track-item {
     display: flex; align-items: center; gap: 12px;
     padding: 8px 12px; border-radius: var(--radius-md);
-    cursor: pointer;
-    transition: background 0.15s;
+    cursor: pointer; transition: background 0.15s;
     -webkit-tap-highlight-color: transparent;
   }
   .track-item:hover  { background: rgba(255,255,255,0.06); }
-  .track-item:active { background: rgba(255,255,255,0.04); transform: none; }
+  .track-item:active { background: rgba(255,255,255,0.04); }
   .track-item.active { background: rgba(var(--accent-rgb),0.08); }
 
   .track-num-col {
@@ -76,8 +89,7 @@
 
   .track-art {
     width: 40px; height: 40px; flex-shrink: 0;
-    border-radius: 4px;
-    background: #282828;
+    border-radius: 4px; background: #282828;
     display: flex; align-items: center; justify-content: center;
     position: relative; overflow: hidden;
   }
@@ -86,8 +98,7 @@
   .bars {
     display: none; position: absolute; inset: 0;
     align-items: flex-end; justify-content: center; gap: 2px;
-    padding-bottom: 10px;
-    background: rgba(0,0,0,0.4);
+    padding-bottom: 10px; background: rgba(0,0,0,0.4);
   }
   .track-item.playing .bars { display: flex; }
   .bar {
@@ -105,7 +116,6 @@
   }
   .track-item.active .track-name { color: var(--accent); font-weight: 600; }
   .track-artist { font-size: 12px; color: var(--text-muted); margin-top: 2px; }
-
   .track-dur {
     font-size: 13px; color: var(--text-muted);
     font-variant-numeric: tabular-nums; flex-shrink: 0;
@@ -114,16 +124,14 @@
   /* ── 플레이어 ── */
   .player {
     position: fixed; bottom: 0; left: 0; right: 0; z-index: 200;
-    background: #181818;
-    border-top: 1px solid rgba(255,255,255,0.08);
-    padding: 12px 16px 28px;
+    background: #181818; border-top: 1px solid rgba(255,255,255,0.08);
+    padding: 12px 16px 32px;
     display: flex; flex-direction: column; gap: 10px;
     transform: translateY(100%);
     transition: transform 0.35s cubic-bezier(0.4,0,0.2,1);
   }
   .player.has-track { transform: translateY(0); }
 
-  /* 곡 정보 + 하트 */
   .player-meta { display: flex; align-items: center; gap: 12px; }
   .player-thumb {
     width: 44px; height: 44px; flex-shrink: 0; border-radius: 4px;
@@ -138,13 +146,11 @@
   .heart-btn {
     background: none; border: none; color: var(--accent);
     cursor: pointer; padding: 4px; flex-shrink: 0;
-    -webkit-tap-highlight-color: transparent;
-    transition: transform 0.15s;
+    -webkit-tap-highlight-color: transparent; transition: transform 0.15s;
   }
   .heart-btn:active { transform: scale(0.85); }
   .heart-btn svg { width: 20px; height: 20px; }
 
-  /* 진행바 */
   .progress-section { display: flex; flex-direction: column; gap: 4px; }
   .seek-wrap {
     position: relative; height: 18px; display: flex; align-items: center; cursor: pointer;
@@ -153,16 +159,12 @@
     position: absolute; inset: 7px 0;
     height: 4px; border-radius: 2px; background: #535353;
   }
-  .seek-fill {
-    height: 100%; border-radius: 2px; background: var(--text-main); width: 0%;
-    transition: background 0.2s;
-  }
+  .seek-fill { height: 100%; border-radius: 2px; background: var(--text-main); width: 0%; transition: background 0.2s; }
   .seek-wrap:hover .seek-fill { background: var(--accent); }
   .seek-thumb {
     position: absolute; top: 50%; transform: translate(-50%,-50%);
     width: 12px; height: 12px; border-radius: 50%; background: #fff;
-    left: 0%; pointer-events: none;
-    opacity: 0; transition: opacity 0.15s;
+    left: 0%; pointer-events: none; opacity: 0; transition: opacity 0.15s;
   }
   .seek-wrap:hover .seek-thumb,
   .seek-wrap.dragging .seek-thumb { opacity: 1; }
@@ -173,32 +175,26 @@
   .time-row {
     display: flex; justify-content: space-between;
     font-size: 11px; color: var(--text-muted); font-variant-numeric: tabular-nums;
-    letter-spacing: 0.02em;
   }
 
-  /* 컨트롤 */
   .player-controls {
-    display: flex; align-items: center; justify-content: space-between;
-    padding: 0 4px;
+    display: flex; align-items: center; justify-content: space-between; padding: 0 4px;
   }
   .ctrl-btn {
     background: none; border: none; color: var(--text-muted);
     cursor: pointer; display: flex; align-items: center; justify-content: center;
-    -webkit-tap-highlight-color: transparent;
-    transition: color 0.15s, transform 0.1s;
-    padding: 4px;
+    -webkit-tap-highlight-color: transparent; transition: color 0.15s, transform 0.1s; padding: 4px;
   }
   .ctrl-btn:hover { color: var(--text-main); }
   .ctrl-btn:active { transform: scale(0.88); }
   .ctrl-btn:disabled { opacity: 0.3; cursor: not-allowed; }
   .ctrl-btn svg { width: 20px; height: 20px; }
-
   .play-btn {
     width: 36px; height: 36px; border-radius: 50%;
     background: var(--text-main); color: #000;
     transition: transform 0.1s, background 0.15s;
   }
-  .play-btn:hover { background: #e0e0e0; color: #000; transform: scale(1.06); }
+  .play-btn:hover { background: #e0e0e0; transform: scale(1.06); }
   .play-btn:active { transform: scale(0.94); }
   .play-btn svg { width: 18px; height: 18px; fill: #000; }
 
@@ -213,11 +209,7 @@
   }
   .toggle-btn-repeat.one::after { display: flex; }
 
-  /* 볼륨 */
-  .vol-row {
-    display: flex; align-items: center; gap: 8px;
-    padding: 0 4px;
-  }
+  .vol-row { display: flex; align-items: center; gap: 8px; padding: 0 4px; }
   .vol-icon { color: var(--text-muted); flex-shrink: 0; }
   .vol-slider-wrap {
     flex: 1; position: relative; height: 18px;
@@ -227,16 +219,12 @@
     position: absolute; inset: 7px 0;
     height: 4px; border-radius: 2px; background: #535353;
   }
-  .vol-fill {
-    height: 100%; border-radius: 2px; background: var(--text-main); width: 40%;
-    transition: background 0.2s;
-  }
+  .vol-fill { height: 100%; border-radius: 2px; background: var(--text-main); width: 40%; transition: background 0.2s; }
   .vol-slider-wrap:hover .vol-fill { background: var(--accent); }
   .vol-thumb {
     position: absolute; top: 50%; transform: translate(-50%,-50%);
     width: 12px; height: 12px; border-radius: 50%; background: #fff;
-    left: 40%; pointer-events: none;
-    opacity: 0; transition: opacity 0.15s;
+    left: 40%; pointer-events: none; opacity: 0; transition: opacity 0.15s;
   }
   .vol-slider-wrap:hover .vol-thumb,
   .vol-slider-wrap.dragging .vol-thumb { opacity: 1; }
@@ -246,8 +234,7 @@
   }
   .vol-label {
     font-size: 11px; color: var(--text-muted);
-    font-variant-numeric: tabular-nums;
-    min-width: 24px; text-align: right;
+    font-variant-numeric: tabular-nums; min-width: 24px; text-align: right;
   }
 
   @keyframes bar-anim {
@@ -260,8 +247,15 @@
 
 <header>
   <div class="header-inner">
-    <h1>내 플레이리스트</h1>
-    <p id="libLabel">0곡</p>
+    <div>
+      <h1>내 플레이리스트</h1>
+      <p id="libLabel">0곡</p>
+    </div>
+    <label class="upload-btn" for="fileInput">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+      파일 추가
+    </label>
+    <input type="file" id="fileInput" accept="audio/*" multiple>
   </div>
 </header>
 
@@ -271,15 +265,13 @@
 
 <div class="player" id="player">
   <div class="player-meta">
-    <div class="player-thumb" id="playerThumb"></div>
+    <div class="player-thumb"></div>
     <div class="player-details">
       <div class="player-title" id="playerTitle">재생 중인 곡 없음</div>
       <div class="player-artist" id="playerArtist">—</div>
     </div>
     <button class="heart-btn" aria-label="좋아요">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-        <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>
-      </svg>
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
     </button>
   </div>
 
@@ -353,39 +345,34 @@
   const volLabel     = document.getElementById('volLabel');
   const volWrap      = document.getElementById('volWrap');
   const libLabel     = document.getElementById('libLabel');
+  const fileInput    = document.getElementById('fileInput');
 
   let tracks = [];
-  let currentIdx  = -1;
-  let isPlaying   = false;
-  let isShuffle   = false;
-  let repeatMode  = 0;
+  let currentIdx   = -1;
+  let isPlaying    = false;
+  let isShuffle    = false;
+  let repeatMode   = 0;
   let shuffleQueue = [];
-  let isSeeking   = false;
+  let isSeeking    = false;
   let trackDurations = {};
 
   /* ── 파일 업로드 ── */
-  /* 파일 추가: input[type=file]을 동적으로 만들어 씀 */
-  function openFilePicker() {
-    const inp = document.createElement('input');
-    inp.type = 'file'; inp.accept = 'audio/*'; inp.multiple = true;
-    inp.addEventListener('change', e => {
-      Array.from(e.target.files).forEach(f => {
-        if (!f.type.startsWith('audio/')) return;
-        const url = URL.createObjectURL(f);
-        const name = f.name.replace(/\.[^/.]+$/, '');
-        tracks.push({ name, artist: '알 수 없는 아티스트', url });
-        /* 길이 미리 로드 */
-        const tmp = new Audio(url);
-        const idx = tracks.length - 1;
-        tmp.addEventListener('loadedmetadata', () => {
-          trackDurations[idx] = tmp.duration;
-          renderList();
-        });
+  fileInput.addEventListener('change', e => {
+    Array.from(e.target.files).forEach(f => {
+      if (!f.type.startsWith('audio/')) return;
+      const url  = URL.createObjectURL(f);
+      const name = f.name.replace(/\.[^/.]+$/, '');
+      const idx  = tracks.length;
+      tracks.push({ name, artist: '알 수 없는 아티스트', url });
+      const tmp = new Audio(url);
+      tmp.addEventListener('loadedmetadata', () => {
+        trackDurations[idx] = tmp.duration;
+        renderList();
       });
-      renderList();
     });
-    inp.click();
-  }
+    e.target.value = '';
+    renderList();
+  });
 
   /* ── 진행바 ── */
   function setSeekUI(pct) {
@@ -437,23 +424,12 @@
   /* ── 렌더링 ── */
   function renderList() {
     libLabel.textContent = `${tracks.length}곡`;
-    trackList.innerHTML = '';
-
-    /* 상단 추가 버튼 */
-    const addRow = document.createElement('div');
-    addRow.style.cssText = 'display:flex;align-items:center;justify-content:space-between;padding:4px 12px 16px;';
-    addRow.innerHTML = `
-      <span style="font-size:13px;color:#a7a7a7;font-weight:500">${tracks.length}곡</span>
-      <button onclick="openFilePicker()" style="display:flex;align-items:center;gap:6px;background:none;border:1px solid #535353;color:#fff;padding:6px 16px;border-radius:20px;font-size:13px;font-weight:600;cursor:pointer;font-family:inherit;">
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
-        파일 추가
-      </button>`;
-    trackList.appendChild(addRow);
+    trackList.innerHTML  = '';
 
     if (tracks.length === 0) {
       const empty = document.createElement('div');
-      empty.style.cssText = 'text-align:center;padding:48px 0;color:#535353;font-size:14px;line-height:1.8;';
-      empty.innerHTML = `<div style="font-size:32px;margin-bottom:12px">♪</div>파일 추가 버튼으로<br>음악을 불러오세요`;
+      empty.style.cssText = 'text-align:center;padding:60px 0;color:#535353;font-size:14px;line-height:2;';
+      empty.innerHTML = `<div style="font-size:36px;margin-bottom:8px">♪</div>상단 버튼으로 음악을 추가하세요`;
       trackList.appendChild(empty);
       return;
     }
@@ -461,8 +437,8 @@
     tracks.forEach((t, i) => {
       const active  = i === currentIdx;
       const playing = active && isPlaying;
-      const dur = trackDurations[i] ? fmtTime(trackDurations[i]) : '—';
-      const item = document.createElement('div');
+      const dur     = trackDurations[i] ? fmtTime(trackDurations[i]) : '—';
+      const item    = document.createElement('div');
       item.className = 'track-item' + (active ? ' active' : '') + (playing ? ' playing' : '');
       item.innerHTML = `
         <div class="track-num-col">
@@ -493,9 +469,9 @@
     if (idx < 0 || idx >= tracks.length) return;
     if (idx === currentIdx) { togglePlay(); return; }
     currentIdx = idx;
-    audio.src = tracks[idx].url;
+    audio.src  = tracks[idx].url;
     audio.play().catch(() => {});
-    isPlaying = true;
+    isPlaying  = true;
     playerEl.classList.add('has-track');
     playerTitle.textContent  = tracks[idx].name;
     playerArtist.textContent = tracks[idx].artist;
@@ -520,7 +496,7 @@
   }
 
   function updatePlayIcon() {
-    iconPlay.style.display  = isPlaying ? 'none' : 'block';
+    iconPlay.style.display  = isPlaying ? 'none'  : 'block';
     iconPause.style.display = isPlaying ? 'block' : 'none';
   }
 
