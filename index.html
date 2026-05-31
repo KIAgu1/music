@@ -5,19 +5,19 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <title>SOUNDROOM</title>
 <style>
-  @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@500;600;700&display=swap');
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@500;600;700&display=swap');
 
   :root {
-    --bg-main:     #080710;
-    --bg-card:     rgba(255, 255, 255, 0.03);
-    --bg-player:   rgba(13, 12, 22, 0.95);
-    --border:      rgba(255, 255, 255, 0.05);
-    --accent:      #bd93f9;
-    --accent-rgb:  189, 147, 249;
-    --text-main:   #f8f8f2;
-    --text-muted:  #6272a4;
-    --radius-lg:   24px;
-    --radius-md:   16px;
+    --bg-main:    #121212;
+    --bg-card:    rgba(255,255,255,0.04);
+    --bg-player:  rgba(24,24,24,0.97);
+    --border:     rgba(255,255,255,0.06);
+    --accent:     #1db954;
+    --accent-rgb: 29,185,84;
+    --text-main:  #ffffff;
+    --text-muted: #a7a7a7;
+    --radius-lg:  16px;
+    --radius-md:  8px;
   }
 
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
@@ -26,184 +26,216 @@
     height: 100%;
     background: var(--bg-main);
     color: var(--text-main);
-    font-family: 'Noto Sans KR', sans-serif;
+    font-family: 'Inter', sans-serif;
     -webkit-font-smoothing: antialiased;
     overscroll-behavior: none;
   }
 
   header {
     position: fixed; top: 0; left: 0; right: 0; z-index: 100;
-    padding: 32px 24px 20px;
-    background: linear-gradient(to bottom, var(--bg-main) 60%, transparent);
+    padding: 40px 24px 16px;
+    background: linear-gradient(to bottom, var(--bg-main) 70%, transparent);
   }
-  .header-inner { display: flex; flex-direction: column; gap: 4px; }
+  .header-inner { display: flex; flex-direction: column; gap: 2px; }
   .header-inner h1 {
     font-family: 'Plus Jakarta Sans', sans-serif;
-    font-size: 28px; font-weight: 700; letter-spacing: -0.5px;
-    background: linear-gradient(135deg, #fff 0%, var(--text-muted) 100%);
-    -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+    font-size: 24px; font-weight: 700; letter-spacing: -0.3px;
+    color: var(--text-main);
   }
   .header-inner p {
-    font-family: 'Plus Jakarta Sans', sans-serif;
-    font-size: 12px; font-weight: 600; color: var(--accent);
-    letter-spacing: 0.08em; text-transform: uppercase;
+    font-size: 12px; font-weight: 500; color: var(--text-muted);
+    letter-spacing: 0.03em;
   }
 
   main {
     position: fixed; inset: 0; overflow-y: auto;
-    padding-top: 110px; padding-bottom: 260px;
-    padding-left: 24px; padding-right: 24px;
+    padding-top: 100px; padding-bottom: 210px;
+    padding-left: 16px; padding-right: 16px;
     -webkit-overflow-scrolling: touch; z-index: 1;
   }
 
-  .track-list { display: flex; flex-direction: column; gap: 12px; }
+  .track-list { display: flex; flex-direction: column; }
 
   .track-item {
-    display: flex; align-items: center; gap: 16px;
-    padding: 12px; border-radius: var(--radius-md);
-    background: var(--bg-card); border: 1px solid var(--border);
-    cursor: pointer; transition: all 0.25s cubic-bezier(0.4,0,0.2,1);
+    display: flex; align-items: center; gap: 12px;
+    padding: 8px 12px; border-radius: var(--radius-md);
+    cursor: pointer;
+    transition: background 0.15s;
     -webkit-tap-highlight-color: transparent;
   }
-  .track-item:active { transform: scale(0.98); }
-  .track-item.active { background: rgba(var(--accent-rgb),0.1); border-color: rgba(var(--accent-rgb),0.3); }
+  .track-item:hover  { background: rgba(255,255,255,0.06); }
+  .track-item:active { background: rgba(255,255,255,0.04); transform: none; }
+  .track-item.active { background: rgba(var(--accent-rgb),0.08); }
+
+  .track-num-col {
+    width: 24px; text-align: center; flex-shrink: 0;
+    font-size: 14px; color: var(--text-muted);
+    font-variant-numeric: tabular-nums;
+  }
+  .track-item.active .track-num-col { color: var(--accent); font-size: 12px; }
 
   .track-art {
-    width: 48px; height: 48px; flex-shrink: 0;
-    border-radius: 12px;
-    background: linear-gradient(135deg, #282a36 0%, #111217 100%);
+    width: 40px; height: 40px; flex-shrink: 0;
+    border-radius: 4px;
+    background: #282828;
     display: flex; align-items: center; justify-content: center;
     position: relative; overflow: hidden;
   }
-  .track-art svg { color: var(--text-muted); width: 20px; height: 20px; }
+  .track-art svg { color: #555; width: 18px; height: 18px; }
 
   .bars {
     display: none; position: absolute; inset: 0;
-    align-items: center; justify-content: center; gap: 3px;
-    background: rgba(0,0,0,0.5);
+    align-items: flex-end; justify-content: center; gap: 2px;
+    padding-bottom: 10px;
+    background: rgba(0,0,0,0.4);
   }
   .track-item.playing .bars { display: flex; }
   .bar {
-    width: 3px; height: 4px; border-radius: 2px; background: var(--accent);
-    animation: bounce 0.6s ease-in-out infinite alternate;
+    width: 3px; border-radius: 1px; background: var(--accent);
+    animation: bar-anim 0.8s ease-in-out infinite alternate;
   }
-  .bar:nth-child(1){animation-delay:0.1s} .bar:nth-child(2){animation-delay:0.3s} .bar:nth-child(3){animation-delay:0.5s}
+  .bar:nth-child(1){height:8px;  animation-delay:0s}
+  .bar:nth-child(2){height:14px; animation-delay:0.2s}
+  .bar:nth-child(3){height:6px;  animation-delay:0.4s}
 
   .track-info { flex: 1; min-width: 0; }
-  .track-name { font-size: 15px; font-weight: 600; color: var(--text-main); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-  .track-item.active .track-name { color: var(--accent); }
-  .track-artist { font-size: 12px; color: var(--text-muted); margin-top: 3px; }
+  .track-name {
+    font-size: 14px; font-weight: 400; color: var(--text-main);
+    white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+  }
+  .track-item.active .track-name { color: var(--accent); font-weight: 600; }
+  .track-artist { font-size: 12px; color: var(--text-muted); margin-top: 2px; }
 
-  /* ═══════════════════════════════════════
-     하단 플레이어
-  ═══════════════════════════════════════ */
+  .track-dur {
+    font-size: 13px; color: var(--text-muted);
+    font-variant-numeric: tabular-nums; flex-shrink: 0;
+  }
+
+  /* ── 플레이어 ── */
   .player {
-    position: fixed; bottom: 20px; left: 20px; right: 20px; z-index: 200;
-    background: var(--bg-player); border: 1px solid var(--border);
-    border-radius: var(--radius-lg); padding: 18px 20px;
-    box-shadow: 0 12px 40px rgba(0,0,0,0.7);
-    backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
-    display: flex; flex-direction: column; gap: 14px;
-    transform: translateY(240px);
-    transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.1);
+    position: fixed; bottom: 0; left: 0; right: 0; z-index: 200;
+    background: #181818;
+    border-top: 1px solid rgba(255,255,255,0.08);
+    padding: 12px 16px 28px;
+    display: flex; flex-direction: column; gap: 10px;
+    transform: translateY(100%);
+    transition: transform 0.35s cubic-bezier(0.4,0,0.2,1);
   }
   .player.has-track { transform: translateY(0); }
 
-  /* ── 진행바 (seek) ── */
-  .progress-container { display: flex; flex-direction: column; gap: 6px; }
+  /* 곡 정보 + 하트 */
+  .player-meta { display: flex; align-items: center; gap: 12px; }
+  .player-thumb {
+    width: 44px; height: 44px; flex-shrink: 0; border-radius: 4px;
+    background: linear-gradient(135deg, #1db954 0%, #158a3e 100%);
+  }
+  .player-details { flex: 1; min-width: 0; }
+  .player-title {
+    font-size: 14px; font-weight: 600; color: var(--text-main);
+    white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+  }
+  .player-artist { font-size: 12px; color: var(--text-muted); margin-top: 1px; }
+  .heart-btn {
+    background: none; border: none; color: var(--accent);
+    cursor: pointer; padding: 4px; flex-shrink: 0;
+    -webkit-tap-highlight-color: transparent;
+    transition: transform 0.15s;
+  }
+  .heart-btn:active { transform: scale(0.85); }
+  .heart-btn svg { width: 20px; height: 20px; }
 
-  /* 히트 영역이 넓은 커스텀 슬라이더 래퍼 */
+  /* 진행바 */
+  .progress-section { display: flex; flex-direction: column; gap: 4px; }
   .seek-wrap {
-    position: relative; height: 20px; display: flex; align-items: center; cursor: pointer;
+    position: relative; height: 18px; display: flex; align-items: center; cursor: pointer;
   }
   .seek-track {
-    position: absolute; left: 0; right: 0; top: 50%; transform: translateY(-50%);
-    height: 4px; border-radius: 2px; background: rgba(255,255,255,0.1); overflow: hidden;
+    position: absolute; inset: 7px 0;
+    height: 4px; border-radius: 2px; background: #535353;
   }
-  .seek-fill { height: 100%; border-radius: 2px; background: var(--accent); width: 0%; }
-  /* 흰색 thumb: 드래그 시 나타남 */
+  .seek-fill {
+    height: 100%; border-radius: 2px; background: var(--text-main); width: 0%;
+    transition: background 0.2s;
+  }
+  .seek-wrap:hover .seek-fill { background: var(--accent); }
   .seek-thumb {
-    position: absolute; top: 50%; transform: translate(-50%, -50%);
-    width: 14px; height: 14px; border-radius: 50%; background: #fff;
+    position: absolute; top: 50%; transform: translate(-50%,-50%);
+    width: 12px; height: 12px; border-radius: 50%; background: #fff;
     left: 0%; pointer-events: none;
-    box-shadow: 0 0 0 3px rgba(var(--accent-rgb), 0.35);
     opacity: 0; transition: opacity 0.15s;
   }
   .seek-wrap:hover .seek-thumb,
   .seek-wrap.dragging .seek-thumb { opacity: 1; }
-  /* 투명 range input이 실제 인터랙션 담당 */
   .seek-input {
     position: absolute; inset: 0; width: 100%; height: 100%;
     opacity: 0; cursor: pointer; -webkit-appearance: none; margin: 0;
   }
-
   .time-row {
     display: flex; justify-content: space-between;
-    font-size: 11px; color: var(--text-muted); font-family: monospace;
+    font-size: 11px; color: var(--text-muted); font-variant-numeric: tabular-nums;
+    letter-spacing: 0.02em;
   }
 
-  /* ── 곡 메타 ── */
-  .player-meta { display: flex; align-items: center; gap: 14px; }
-  .player-thumb {
-    width: 48px; height: 48px; flex-shrink: 0; border-radius: var(--radius-md);
-    background: linear-gradient(135deg, var(--accent) 0%, #ff79c6 100%);
-    box-shadow: 0 4px 12px rgba(var(--accent-rgb), 0.3);
-  }
-  .player-details { flex: 1; min-width: 0; }
-  .player-title { font-size: 15px; font-weight: 700; color: var(--text-main); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-  .player-artist { font-size: 12px; color: var(--text-muted); margin-top: 1px; }
-
-  /* ── 재생 컨트롤 ── */
-  .player-controls { display: flex; align-items: center; justify-content: center; gap: 24px; }
-  .ctrl-btn {
-    background: none; border: none; color: var(--text-main);
-    cursor: pointer; display: flex; align-items: center; justify-content: center;
-    -webkit-tap-highlight-color: transparent; transition: transform 0.1s, color 0.2s;
-  }
-  .ctrl-btn:disabled { opacity: 0.3; cursor: not-allowed; }
-  .ctrl-btn:active:not(:disabled) { transform: scale(0.9); }
-  .ctrl-btn svg { width: 20px; height: 20px; }
-  .play-btn {
-    width: 52px; height: 52px; border-radius: 50%;
-    background: var(--text-main); color: var(--bg-main);
-    box-shadow: 0 6px 16px rgba(255,255,255,0.1);
-  }
-  .play-btn svg { width: 22px; height: 22px; fill: var(--bg-main); }
-
-  /* ── 유틸 바 ── */
-  .player-utils {
+  /* 컨트롤 */
+  .player-controls {
     display: flex; align-items: center; justify-content: space-between;
-    padding-top: 4px; border-top: 1px solid rgba(255,255,255,0.04);
+    padding: 0 4px;
   }
-  .util-left { display: flex; align-items: center; gap: 16px; }
-  .toggle-btn { color: var(--text-muted); }
-  .toggle-btn.active { color: var(--accent); filter: drop-shadow(0 0 4px rgba(var(--accent-rgb),0.5)); }
+  .ctrl-btn {
+    background: none; border: none; color: var(--text-muted);
+    cursor: pointer; display: flex; align-items: center; justify-content: center;
+    -webkit-tap-highlight-color: transparent;
+    transition: color 0.15s, transform 0.1s;
+    padding: 4px;
+  }
+  .ctrl-btn:hover { color: var(--text-main); }
+  .ctrl-btn:active { transform: scale(0.88); }
+  .ctrl-btn:disabled { opacity: 0.3; cursor: not-allowed; }
+  .ctrl-btn svg { width: 20px; height: 20px; }
+
+  .play-btn {
+    width: 36px; height: 36px; border-radius: 50%;
+    background: var(--text-main); color: #000;
+    transition: transform 0.1s, background 0.15s;
+  }
+  .play-btn:hover { background: #e0e0e0; color: #000; transform: scale(1.06); }
+  .play-btn:active { transform: scale(0.94); }
+  .play-btn svg { width: 18px; height: 18px; fill: #000; }
+
+  .toggle-btn.active { color: var(--accent); }
   .toggle-btn-repeat { position: relative; }
   .toggle-btn-repeat::after {
-    content: '1'; font-size: 8px; font-weight: bold; position: absolute; top: 1px; right: 0;
-    background: var(--accent); color: var(--bg-main);
-    width: 10px; height: 10px; border-radius: 50%;
+    content: '1'; font-size: 7px; font-weight: 700;
+    position: absolute; top: 0; right: 0;
+    background: var(--accent); color: #000;
+    width: 9px; height: 9px; border-radius: 50%;
     display: none; align-items: center; justify-content: center;
   }
   .toggle-btn-repeat.one::after { display: flex; }
 
-  /* ── 볼륨 컨트롤 ── */
-  .vol-wrap { display: flex; align-items: center; gap: 8px; }
-  .vol-icon { color: var(--text-muted); width: 16px; height: 16px; flex-shrink: 0; }
-
+  /* 볼륨 */
+  .vol-row {
+    display: flex; align-items: center; gap: 8px;
+    padding: 0 4px;
+  }
+  .vol-icon { color: var(--text-muted); flex-shrink: 0; }
   .vol-slider-wrap {
-    position: relative; height: 20px; display: flex; align-items: center;
-    width: 80px; cursor: pointer;
+    flex: 1; position: relative; height: 18px;
+    display: flex; align-items: center; cursor: pointer;
   }
   .vol-track {
-    position: absolute; left: 0; right: 0; top: 50%; transform: translateY(-50%);
-    height: 4px; border-radius: 2px; background: rgba(255,255,255,0.12); overflow: hidden;
+    position: absolute; inset: 7px 0;
+    height: 4px; border-radius: 2px; background: #535353;
   }
-  .vol-fill { height: 100%; border-radius: 2px; background: #fff; width: 80%; }
+  .vol-fill {
+    height: 100%; border-radius: 2px; background: var(--text-main); width: 40%;
+    transition: background 0.2s;
+  }
+  .vol-slider-wrap:hover .vol-fill { background: var(--accent); }
   .vol-thumb {
     position: absolute; top: 50%; transform: translate(-50%,-50%);
     width: 12px; height: 12px; border-radius: 50%; background: #fff;
-    left: 80%; pointer-events: none;
+    left: 40%; pointer-events: none;
     opacity: 0; transition: opacity 0.15s;
   }
   .vol-slider-wrap:hover .vol-thumb,
@@ -212,16 +244,15 @@
     position: absolute; inset: 0; width: 100%; height: 100%;
     opacity: 0; cursor: pointer; -webkit-appearance: none; margin: 0;
   }
-  /* 볼륨 숫자 라벨 */
   .vol-label {
-    font-size: 12px; color: var(--text-main); font-family: monospace;
-    font-weight: 600; min-width: 28px; text-align: right;
-    transition: color 0.2s;
+    font-size: 11px; color: var(--text-muted);
+    font-variant-numeric: tabular-nums;
+    min-width: 24px; text-align: right;
   }
 
-  @keyframes bounce {
-    from { transform: scaleY(0.3); }
-    to   { transform: scaleY(1.1); }
+  @keyframes bar-anim {
+    from { transform: scaleY(0.4); }
+    to   { transform: scaleY(1); }
   }
 </style>
 </head>
@@ -229,8 +260,8 @@
 
 <header>
   <div class="header-inner">
-    <p id="libLabel">MY PLAYLIST</p>
-    <h1>SOUNDROOM</h1>
+    <h1>내 플레이리스트</h1>
+    <p id="libLabel">0곡</p>
   </div>
 </header>
 
@@ -238,15 +269,23 @@
   <div class="track-list" id="trackList"></div>
 </main>
 
-<!-- 플레이어 -->
 <div class="player" id="player">
+  <div class="player-meta">
+    <div class="player-thumb" id="playerThumb"></div>
+    <div class="player-details">
+      <div class="player-title" id="playerTitle">재생 중인 곡 없음</div>
+      <div class="player-artist" id="playerArtist">—</div>
+    </div>
+    <button class="heart-btn" aria-label="좋아요">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>
+      </svg>
+    </button>
+  </div>
 
-  <!-- 진행바 -->
-  <div class="progress-container">
+  <div class="progress-section">
     <div class="seek-wrap" id="seekWrap">
-      <div class="seek-track">
-        <div class="seek-fill" id="seekFill"></div>
-      </div>
+      <div class="seek-track"><div class="seek-fill" id="seekFill"></div></div>
       <div class="seek-thumb" id="seekThumb"></div>
       <input type="range" class="seek-input" id="seekInput" min="0" max="100" step="0.05" value="0">
     </div>
@@ -256,59 +295,40 @@
     </div>
   </div>
 
-  <!-- 곡 정보 -->
-  <div class="player-meta">
-    <div class="player-thumb"></div>
-    <div class="player-details">
-      <div class="player-title" id="playerTitle">재생 중인 곡 없음</div>
-      <div class="player-artist" id="playerArtist">—</div>
-    </div>
-  </div>
-
-  <!-- 재생 컨트롤 -->
   <div class="player-controls">
+    <button class="ctrl-btn toggle-btn" id="shuffleBtn" aria-label="셔플">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="16 3 21 3 21 8"/><line x1="4" y1="20" x2="21" y2="3"/><polyline points="21 16 21 21 16 21"/><line x1="15" y1="15" x2="21" y2="21"/><line x1="4" y1="4" x2="9" y2="9"/></svg>
+    </button>
     <button class="ctrl-btn" id="prevBtn" aria-label="이전 곡">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polygon points="19 20 9 12 19 4 19 20"/><line x1="5" y1="19" x2="5" y2="5"/></svg>
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="19 20 9 12 19 4 19 20"/><line x1="5" y1="19" x2="5" y2="5"/></svg>
     </button>
     <button class="ctrl-btn play-btn" id="playBtn" aria-label="재생/일시정지">
       <svg id="iconPlay"  viewBox="0 0 24 24"><polygon points="6,4 20,12 6,20"/></svg>
-      <svg id="iconPause" viewBox="0 0 24 24" style="display:none"><rect x="6"  y="4" width="4" height="16" rx="1"/><rect x="14" y="4" width="4" height="16" rx="1"/></svg>
+      <svg id="iconPause" viewBox="0 0 24 24" style="display:none"><rect x="6" y="4" width="4" height="16" rx="1"/><rect x="14" y="4" width="4" height="16" rx="1"/></svg>
     </button>
     <button class="ctrl-btn" id="nextBtn" aria-label="다음 곡">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polygon points="5 4 15 12 5 20 5 4"/><line x1="19" y1="5" x2="19" y2="19"/></svg>
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="5 4 15 12 5 20 5 4"/><line x1="19" y1="5" x2="19" y2="19"/></svg>
+    </button>
+    <button class="ctrl-btn toggle-btn toggle-btn-repeat" id="repeatBtn" aria-label="반복">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="17 1 21 5 17 9"/><path d="M3 11V9a4 4 0 0 1 4-4h14"/><polyline points="7 23 3 19 7 15"/><path d="M21 13v2a4 4 0 0 1-4 4H3"/></svg>
     </button>
   </div>
 
-  <!-- 셔플/반복 + 볼륨 -->
-  <div class="player-utils">
-    <div class="util-left">
-      <button class="ctrl-btn toggle-btn" id="shuffleBtn" aria-label="셔플">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="16 3 21 3 21 8"/><line x1="4" y1="20" x2="21" y2="3"/><polyline points="21 16 21 21 16 21"/><line x1="15" y1="15" x2="21" y2="21"/><line x1="4" y1="4" x2="9" y2="9"/></svg>
-      </button>
-      <button class="ctrl-btn toggle-btn toggle-btn-repeat" id="repeatBtn" aria-label="반복">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="17 1 21 5 17 9"/><path d="M3 11V9a4 4 0 0 1 4-4h14"/><polyline points="7 23 3 19 7 15"/><path d="M21 13v2a4 4 0 0 1-4 4H3"/></svg>
-      </button>
+  <div class="vol-row">
+    <svg class="vol-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/></svg>
+    <div class="vol-slider-wrap" id="volWrap">
+      <div class="vol-track"><div class="vol-fill" id="volFill"></div></div>
+      <div class="vol-thumb" id="volThumb"></div>
+      <input type="range" class="vol-input" id="volInput" min="0" max="100" step="1" value="40">
     </div>
-
-    <div class="vol-wrap">
-      <svg class="vol-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-        <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/>
-        <path d="M19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.07"/>
-      </svg>
-      <div class="vol-slider-wrap" id="volWrap">
-        <div class="vol-track"><div class="vol-fill" id="volFill"></div></div>
-        <div class="vol-thumb" id="volThumb"></div>
-        <input type="range" class="vol-input" id="volInput" min="0" max="100" step="1" value="80">
-      </div>
-      <span class="vol-label" id="volLabel">80</span>
-    </div>
+    <svg class="vol-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.07"/></svg>
+    <span class="vol-label" id="volLabel">40</span>
   </div>
 </div>
 
 <audio id="audioEl"></audio>
 
 <script>
-  /* ── 요소 참조 ── */
   const audio        = document.getElementById('audioEl');
   const trackList    = document.getElementById('trackList');
   const playerEl     = document.getElementById('player');
@@ -334,39 +354,57 @@
   const volWrap      = document.getElementById('volWrap');
   const libLabel     = document.getElementById('libLabel');
 
-  /* ── 상태 ── */
-  let tracks = [
-    { name: "Heavy Serenade", artist: "엔믹스", url: "https://res.cloudinary.com/dhgv4vln9/video/upload/v1780227297/songs_song1_rpxlmj.mp3" },
-    { name: "노래 제목 2",   artist: "아티스트 2", url: "" }
-  ];
+  let tracks = [];
   let currentIdx  = -1;
   let isPlaying   = false;
   let isShuffle   = false;
-  let repeatMode  = 0;       // 0:안함 1:전체 2:한곡
+  let repeatMode  = 0;
   let shuffleQueue = [];
-  let isSeeking   = false;   // 드래그 중 timeupdate 무시
+  let isSeeking   = false;
+  let trackDurations = {};
 
-  /* ═══════════════════════════════════════
-     진행바 (seek)
-  ═══════════════════════════════════════ */
+  /* ── 파일 업로드 ── */
+  /* 파일 추가: input[type=file]을 동적으로 만들어 씀 */
+  function openFilePicker() {
+    const inp = document.createElement('input');
+    inp.type = 'file'; inp.accept = 'audio/*'; inp.multiple = true;
+    inp.addEventListener('change', e => {
+      Array.from(e.target.files).forEach(f => {
+        if (!f.type.startsWith('audio/')) return;
+        const url = URL.createObjectURL(f);
+        const name = f.name.replace(/\.[^/.]+$/, '');
+        tracks.push({ name, artist: '알 수 없는 아티스트', url });
+        /* 길이 미리 로드 */
+        const tmp = new Audio(url);
+        const idx = tracks.length - 1;
+        tmp.addEventListener('loadedmetadata', () => {
+          trackDurations[idx] = tmp.duration;
+          renderList();
+        });
+      });
+      renderList();
+    });
+    inp.click();
+  }
+
+  /* ── 진행바 ── */
   function setSeekUI(pct) {
-    seekFill.style.width  = pct + '%';
-    seekThumb.style.left  = pct + '%';
-    seekInput.value       = pct;
+    seekFill.style.width = pct + '%';
+    seekThumb.style.left = pct + '%';
+    seekInput.value = pct;
   }
 
   audio.addEventListener('timeupdate', () => {
     if (isSeeking || !audio.duration) return;
-    const pct = (audio.currentTime / audio.duration) * 100;
-    setSeekUI(pct);
+    setSeekUI((audio.currentTime / audio.duration) * 100);
     timeCurrent.textContent = fmtTime(audio.currentTime);
   });
-
   audio.addEventListener('loadedmetadata', () => {
     timeDuration.textContent = fmtTime(audio.duration);
+    trackDurations[currentIdx] = audio.duration;
+    renderList();
   });
 
-  /* range input 이벤트로 seek */
   seekInput.addEventListener('mousedown',  () => { isSeeking = true;  seekWrap.classList.add('dragging'); });
   seekInput.addEventListener('touchstart', () => { isSeeking = true;  seekWrap.classList.add('dragging'); }, { passive: true });
   seekInput.addEventListener('input', e => {
@@ -376,20 +414,17 @@
   });
   seekInput.addEventListener('change', e => {
     if (audio.duration) audio.currentTime = audio.duration * parseFloat(e.target.value) / 100;
-    isSeeking = false;
-    seekWrap.classList.remove('dragging');
+    isSeeking = false; seekWrap.classList.remove('dragging');
   });
   seekInput.addEventListener('mouseup',  () => { isSeeking = false; seekWrap.classList.remove('dragging'); });
   seekInput.addEventListener('touchend', () => { isSeeking = false; seekWrap.classList.remove('dragging'); });
 
-  /* ═══════════════════════════════════════
-     볼륨 슬라이더
-  ═══════════════════════════════════════ */
+  /* ── 볼륨 (로그 곡선) ── */
   function setVolUI(v) {
     volFill.style.width  = v + '%';
     volThumb.style.left  = v + '%';
     volLabel.textContent = Math.round(v);
-    audio.volume = v / 100;
+    audio.volume = Math.pow(v / 100, 2.5);
   }
 
   volInput.addEventListener('mousedown',  () => volWrap.classList.add('dragging'));
@@ -397,32 +432,53 @@
   volInput.addEventListener('input',  e  => setVolUI(parseFloat(e.target.value)));
   volInput.addEventListener('mouseup',  () => volWrap.classList.remove('dragging'));
   volInput.addEventListener('touchend', () => volWrap.classList.remove('dragging'));
+  setVolUI(40);
 
-  /* ── 초기 볼륨 ── */
-  setVolUI(80);
-
-  /* ═══════════════════════════════════════
-     목록 렌더링
-  ═══════════════════════════════════════ */
+  /* ── 렌더링 ── */
   function renderList() {
-    libLabel.textContent = `MY PLAYLIST · ${tracks.length}`;
-    trackList.innerHTML  = '';
+    libLabel.textContent = `${tracks.length}곡`;
+    trackList.innerHTML = '';
+
+    /* 상단 추가 버튼 */
+    const addRow = document.createElement('div');
+    addRow.style.cssText = 'display:flex;align-items:center;justify-content:space-between;padding:4px 12px 16px;';
+    addRow.innerHTML = `
+      <span style="font-size:13px;color:#a7a7a7;font-weight:500">${tracks.length}곡</span>
+      <button onclick="openFilePicker()" style="display:flex;align-items:center;gap:6px;background:none;border:1px solid #535353;color:#fff;padding:6px 16px;border-radius:20px;font-size:13px;font-weight:600;cursor:pointer;font-family:inherit;">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+        파일 추가
+      </button>`;
+    trackList.appendChild(addRow);
+
+    if (tracks.length === 0) {
+      const empty = document.createElement('div');
+      empty.style.cssText = 'text-align:center;padding:48px 0;color:#535353;font-size:14px;line-height:1.8;';
+      empty.innerHTML = `<div style="font-size:32px;margin-bottom:12px">♪</div>파일 추가 버튼으로<br>음악을 불러오세요`;
+      trackList.appendChild(empty);
+      return;
+    }
+
     tracks.forEach((t, i) => {
-      const active   = i === currentIdx;
-      const playing  = active && isPlaying;
+      const active  = i === currentIdx;
+      const playing = active && isPlaying;
+      const dur = trackDurations[i] ? fmtTime(trackDurations[i]) : '—';
       const item = document.createElement('div');
       item.className = 'track-item' + (active ? ' active' : '') + (playing ? ' playing' : '');
       item.innerHTML = `
+        <div class="track-num-col">
+          ${active
+            ? `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/></svg>`
+            : `<span>${i + 1}</span>`}
+        </div>
         <div class="track-art">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-            <path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/>
-          </svg>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/></svg>
           <div class="bars"><div class="bar"></div><div class="bar"></div><div class="bar"></div></div>
         </div>
         <div class="track-info">
           <div class="track-name">${esc(t.name)}</div>
           <div class="track-artist">${esc(t.artist)}</div>
-        </div>`;
+        </div>
+        <div class="track-dur">${dur}</div>`;
       item.addEventListener('click', () => selectTrack(i));
       trackList.appendChild(item);
     });
@@ -432,27 +488,22 @@
     return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
   }
 
-  /* ═══════════════════════════════════════
-     재생 제어
-  ═══════════════════════════════════════ */
+  /* ── 재생 제어 ── */
   function selectTrack(idx) {
     if (idx < 0 || idx >= tracks.length) return;
     if (idx === currentIdx) { togglePlay(); return; }
     currentIdx = idx;
-    const t = tracks[idx];
-    audio.src = t.url;
+    audio.src = tracks[idx].url;
     audio.play().catch(() => {});
     isPlaying = true;
     playerEl.classList.add('has-track');
-    playerTitle.textContent  = t.name;
-    playerArtist.textContent = t.artist;
+    playerTitle.textContent  = tracks[idx].name;
+    playerArtist.textContent = tracks[idx].artist;
     setSeekUI(0);
     timeCurrent.textContent  = '0:00';
-    timeDuration.textContent = '0:00';
-    updatePlayIcon();
-    updateNavBtns();
-    renderList();
-    if (isShuffle && shuffleQueue.length > 0) {
+    timeDuration.textContent = trackDurations[idx] ? fmtTime(trackDurations[idx]) : '0:00';
+    updatePlayIcon(); updateNavBtns(); renderList();
+    if (isShuffle) {
       const qi = shuffleQueue.indexOf(idx);
       if (qi > -1) shuffleQueue.splice(qi, 1);
     }
@@ -465,8 +516,7 @@
     }
     if (audio.paused) { audio.play().catch(() => {}); isPlaying = true; }
     else              { audio.pause(); isPlaying = false; }
-    updatePlayIcon();
-    renderList();
+    updatePlayIcon(); renderList();
   }
 
   function updatePlayIcon() {
@@ -479,7 +529,6 @@
     nextBtn.disabled = !isShuffle && repeatMode === 0 && currentIdx === tracks.length - 1 && shuffleQueue.length === 0;
   }
 
-  /* 자동 다음 곡 */
   audio.addEventListener('ended', () => {
     if (repeatMode === 2) { audio.currentTime = 0; audio.play().catch(() => {}); return; }
     nextTrack();
@@ -488,8 +537,8 @@
   function nextTrack() {
     if (repeatMode === 2) { audio.currentTime = 0; audio.play().catch(() => {}); return; }
     if (isShuffle) {
-      if (shuffleQueue.length === 0) {
-        if (repeatMode === 1) { initiateShuffleQueue(); if (shuffleQueue.length > 0) { selectTrack(shuffleQueue.shift()); return; } }
+      if (!shuffleQueue.length) {
+        if (repeatMode === 1) { initiateShuffleQueue(); if (shuffleQueue.length) { selectTrack(shuffleQueue.shift()); return; } }
         isPlaying = false; updatePlayIcon(); renderList(); return;
       }
       selectTrack(shuffleQueue.shift());
@@ -501,7 +550,7 @@
 
   function prevTrack() {
     if (audio.currentTime > 4) { audio.currentTime = 0; return; }
-    if (isShuffle) { initiateShuffleQueue(); if (shuffleQueue.length > 0) selectTrack(shuffleQueue.shift()); }
+    if (isShuffle) { initiateShuffleQueue(); if (shuffleQueue.length) selectTrack(shuffleQueue.shift()); }
     else {
       if (currentIdx > 0) selectTrack(currentIdx - 1);
       else if (repeatMode === 1) selectTrack(tracks.length - 1);
@@ -516,7 +565,6 @@
     }
   }
 
-  /* ── 버튼 이벤트 ── */
   playBtn.addEventListener('click', togglePlay);
   prevBtn.addEventListener('click', prevTrack);
   nextBtn.addEventListener('click', nextTrack);
@@ -536,13 +584,11 @@
     updateNavBtns();
   });
 
-  /* ── 유틸 ── */
   function fmtTime(s) {
     if (!isFinite(s)) return '0:00';
     return Math.floor(s / 60) + ':' + Math.floor(s % 60).toString().padStart(2, '0');
   }
 
-  /* ── 초기 렌더 ── */
   renderList();
 </script>
 </body>
