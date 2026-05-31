@@ -347,14 +347,10 @@
   const libLabel     = document.getElementById('libLabel');
   const fileInput    = document.getElementById('fileInput');
 
-  let tracks = [];
-
-fetch('./songs.json')
-  .then(res => res.json())
-  .then(data => {
-    tracks = data;
-    renderList();
-  });
+  let tracks = [
+  { name: "Heavy Serenade", artist: "엔믹스", url: "https://res.cloudinary.com/dhgv4vln9/video/upload/v1780227297/songs_song1_rpxlmj.mp3" },
+  { name: "노래 제목 2",   artist: "아티스트 2", url: "여기에URL" }
+];
   let currentIdx   = -1;
   let isPlaying    = false;
   let isShuffle    = false;
