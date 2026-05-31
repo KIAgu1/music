@@ -5,12 +5,12 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <title>SOUNDROOM</title>
 <style>
-  @import url('https://fonts.googleapis.com/css2?family=Pretendard:wght=400;500;600;700&family=Plus+Jakarta+Sans:wght=500;600;700&display=swap');
+  @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@500;600;700&display=swap');
 
   :root {
     --bg-main:     #080710;
     --bg-card:     rgba(255, 255, 255, 0.03);
-    --bg-player:   rgba(13, 12, 22, 0.92);
+    --bg-player:   rgba(13, 12, 22, 0.95);
     --border:      rgba(255, 255, 255, 0.05);
     --accent:      #bd93f9;
     --accent-rgb:  189, 147, 249;
@@ -26,78 +26,47 @@
     height: 100%;
     background: var(--bg-main);
     color: var(--text-main);
-    font-family: 'Pretendard', sans-serif;
+    font-family: 'Noto Sans KR', sans-serif;
     -webkit-font-smoothing: antialiased;
     overscroll-behavior: none;
   }
 
-  /* ── 헤더 ── */
   header {
-    position: fixed; top: 0; left: 0; right: 0;
-    z-index: 100;
+    position: fixed; top: 0; left: 0; right: 0; z-index: 100;
     padding: 32px 24px 20px;
     background: linear-gradient(to bottom, var(--bg-main) 60%, transparent);
   }
-
-  .header-inner {
-    display: flex;
-    flex-direction: column;
-    gap: 4px;
-  }
-
+  .header-inner { display: flex; flex-direction: column; gap: 4px; }
   .header-inner h1 {
     font-family: 'Plus Jakarta Sans', sans-serif;
-    font-size: 28px;
-    font-weight: 700;
-    letter-spacing: -0.5px;
+    font-size: 28px; font-weight: 700; letter-spacing: -0.5px;
     background: linear-gradient(135deg, #fff 0%, var(--text-muted) 100%);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent;
   }
-
   .header-inner p {
     font-family: 'Plus Jakarta Sans', sans-serif;
-    font-size: 12px;
-    font-weight: 600;
-    color: var(--accent);
-    letter-spacing: 0.08em;
-    text-transform: uppercase;
+    font-size: 12px; font-weight: 600; color: var(--accent);
+    letter-spacing: 0.08em; text-transform: uppercase;
   }
 
-  /* ── 메인 콘텐츠 ── */
   main {
-    position: fixed; inset: 0;
-    overflow-y: auto;
-    padding-top: 110px;
-    padding-bottom: 240px;
+    position: fixed; inset: 0; overflow-y: auto;
+    padding-top: 110px; padding-bottom: 260px;
     padding-left: 24px; padding-right: 24px;
-    -webkit-overflow-scrolling: touch;
-    z-index: 1;
+    -webkit-overflow-scrolling: touch; z-index: 1;
   }
 
-  .track-list { 
-    display: flex; 
-    flex-direction: column; 
-    gap: 12px; 
-  }
+  .track-list { display: flex; flex-direction: column; gap: 12px; }
 
   .track-item {
     display: flex; align-items: center; gap: 16px;
-    padding: 12px;
-    border-radius: var(--radius-md);
-    background: var(--bg-card);
-    border: 1px solid var(--border);
-    cursor: pointer;
-    transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+    padding: 12px; border-radius: var(--radius-md);
+    background: var(--bg-card); border: 1px solid var(--border);
+    cursor: pointer; transition: all 0.25s cubic-bezier(0.4,0,0.2,1);
     -webkit-tap-highlight-color: transparent;
   }
-  
   .track-item:active { transform: scale(0.98); }
-  
-  .track-item.active {
-    background: rgba(var(--accent-rgb), 0.1);
-    border-color: rgba(var(--accent-rgb), 0.3);
-  }
+  .track-item.active { background: rgba(var(--accent-rgb),0.1); border-color: rgba(var(--accent-rgb),0.3); }
 
   .track-art {
     width: 48px; height: 48px; flex-shrink: 0;
@@ -106,150 +75,86 @@
     display: flex; align-items: center; justify-content: center;
     position: relative; overflow: hidden;
   }
-  
   .track-art svg { color: var(--text-muted); width: 20px; height: 20px; }
 
   .bars {
-    display: none;
-    position: absolute; inset: 0;
+    display: none; position: absolute; inset: 0;
     align-items: center; justify-content: center; gap: 3px;
-    background: rgba(0, 0, 0, 0.5);
+    background: rgba(0,0,0,0.5);
   }
   .track-item.playing .bars { display: flex; }
   .bar {
-    width: 3px; height: 4px; border-radius: 2px;
-    background: var(--accent);
+    width: 3px; height: 4px; border-radius: 2px; background: var(--accent);
     animation: bounce 0.6s ease-in-out infinite alternate;
   }
-  .bar:nth-child(1) { animation-delay: 0.1s; }
-  .bar:nth-child(2) { animation-delay: 0.3s; }
-  .bar:nth-child(3) { animation-delay: 0.5s; }
+  .bar:nth-child(1){animation-delay:0.1s} .bar:nth-child(2){animation-delay:0.3s} .bar:nth-child(3){animation-delay:0.5s}
 
   .track-info { flex: 1; min-width: 0; }
-  .track-name {
-    font-size: 15px; font-weight: 600;
-    color: var(--text-main);
-    white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
-  }
+  .track-name { font-size: 15px; font-weight: 600; color: var(--text-main); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
   .track-item.active .track-name { color: var(--accent); }
-  .track-artist {
-    font-size: 12px; color: var(--text-muted);
-    margin-top: 3px;
-  }
+  .track-artist { font-size: 12px; color: var(--text-muted); margin-top: 3px; }
 
-  /* ── 하단 고정 플레이어 ── */
+  /* ═══════════════════════════════════════
+     하단 플레이어
+  ═══════════════════════════════════════ */
   .player {
-    position: fixed; bottom: 24px; left: 24px; right: 24px;
-    z-index: 200;
-    background: var(--bg-player);
-    border: 1px solid var(--border);
-    border-radius: var(--radius-lg);
-    padding: 20px;
+    position: fixed; bottom: 20px; left: 20px; right: 20px; z-index: 200;
+    background: var(--bg-player); border: 1px solid var(--border);
+    border-radius: var(--radius-lg); padding: 18px 20px;
     box-shadow: 0 12px 40px rgba(0,0,0,0.7);
-    backdrop-filter: blur(20px);
-    -webkit-backdrop-filter: blur(20px);
+    backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
     display: flex; flex-direction: column; gap: 14px;
     transform: translateY(240px);
     transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.1);
   }
   .player.has-track { transform: translateY(0); }
 
-  /* 진행 바 */
+  /* ── 진행바 (seek) ── */
   .progress-container { display: flex; flex-direction: column; gap: 6px; }
-  .progress-wrap {
-    height: 4px; border-radius: 2px; background: rgba(255,255,255,0.1);
-    position: relative; cursor: pointer; padding: 2px 0;
+
+  /* 히트 영역이 넓은 커스텀 슬라이더 래퍼 */
+  .seek-wrap {
+    position: relative; height: 20px; display: flex; align-items: center; cursor: pointer;
   }
-  .progress-bg { height: 100%; width: 100%; background: rgba(255,255,255,0.08); border-radius: 2px; position: relative; }
-  .progress-fill {
-    height: 100%; border-radius: 2px; background: var(--accent); width: 0%;
+  .seek-track {
+    position: absolute; left: 0; right: 0; top: 50%; transform: translateY(-50%);
+    height: 4px; border-radius: 2px; background: rgba(255,255,255,0.1); overflow: hidden;
   }
-  .time-row {
-    display: flex; justify-content: space-between;
-    font-family: 'Plus Jakarta Sans', sans-serif; font-size: 11px; color: var(--text-muted);
-    font-weight: 500;
+  .seek-fill { height: 100%; border-radius: 2px; background: var(--accent); width: 0%; }
+  /* 흰색 thumb: 드래그 시 나타남 */
+  .seek-thumb {
+    position: absolute; top: 50%; transform: translate(-50%, -50%);
+    width: 14px; height: 14px; border-radius: 50%; background: #fff;
+    left: 0%; pointer-events: none;
+    box-shadow: 0 0 0 3px rgba(var(--accent-rgb), 0.35);
+    opacity: 0; transition: opacity 0.15s;
+  }
+  .seek-wrap:hover .seek-thumb,
+  .seek-wrap.dragging .seek-thumb { opacity: 1; }
+  /* 투명 range input이 실제 인터랙션 담당 */
+  .seek-input {
+    position: absolute; inset: 0; width: 100%; height: 100%;
+    opacity: 0; cursor: pointer; -webkit-appearance: none; margin: 0;
   }
 
-  /* 곡 메타 정보 */
+  .time-row {
+    display: flex; justify-content: space-between;
+    font-size: 11px; color: var(--text-muted); font-family: monospace;
+  }
+
+  /* ── 곡 메타 ── */
   .player-meta { display: flex; align-items: center; gap: 14px; }
   .player-thumb {
-    width: 48px; height: 48px; flex-shrink: 0;
-    border-radius: var(--radius-md);
+    width: 48px; height: 48px; flex-shrink: 0; border-radius: var(--radius-md);
     background: linear-gradient(135deg, var(--accent) 0%, #ff79c6 100%);
     box-shadow: 0 4px 12px rgba(var(--accent-rgb), 0.3);
   }
   .player-details { flex: 1; min-width: 0; }
-  .player-title {
-    font-size: 15px; font-weight: 700; color: var(--text-main);
-    white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
-  }
+  .player-title { font-size: 15px; font-weight: 700; color: var(--text-main); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
   .player-artist { font-size: 12px; color: var(--text-muted); margin-top: 1px; }
 
-  /* ⚙️ 컨트롤 툴 바 */
-  .player-utils {
-    display: flex; align-items: center; justify-content: space-between;
-    padding-top: 4px; border-top: 1px solid rgba(255,255,255,0.03);
-  }
-  
-  .util-left { display: flex; align-items: center; gap: 16px; }
-
-  /* 🔊 100% 작동 보장 슬라이더 개조 */
-  .volume-container { display: flex; align-items: center; gap: 8px; width: 100px; }
-  
-  .volume-slider {
-    -webkit-appearance: none;
-    appearance: none;
-    width: 100%;
-    height: 4px;
-    border-radius: 2px;
-    background: rgba(255, 255, 255, 0.15);
-    outline: none;
-    cursor: pointer;
-  }
-
-  /* 슬라이더 손잡이 조절 (크롬/사파리/모바일 브라우저 전용) */
-  .volume-slider::-webkit-slider-thumb {
-    -webkit-appearance: none;
-    appearance: none;
-    width: 10px;
-    height: 10px;
-    border-radius: 50%;
-    background: var(--text-main);
-    transition: transform 0.1s;
-  }
-  .volume-slider::-webkit-slider-thumb:active {
-    transform: scale(1.4);
-  }
-
-  /* 슬라이더 손잡이 조절 (파이어폭스 전용) */
-  .volume-slider::-moz-range-thumb {
-    width: 10px;
-    height: 10px;
-    border-radius: 50%;
-    background: var(--text-main);
-    border: none;
-    transition: transform 0.1s;
-  }
-  .volume-slider::-moz-range-thumb:active {
-    transform: scale(1.4);
-  }
-
-  /* 토글식 유틸 버튼 스타일 */
-  .toggle-btn { color: var(--text-muted); }
-  .toggle-btn.active { color: var(--accent); filter: drop-shadow(0 0 4px rgba(var(--accent-rgb), 0.5)); }
-  .toggle-btn-repeat { position: relative; }
-  .toggle-btn-repeat::after {
-    content: '1'; font-size: 8px; font-weight: bold; position: absolute; top: 1px; right: 0;
-    background: var(--accent); color: var(--bg-main); width: 10px; height: 10px; border-radius: 50%;
-    display: none; align-items: center; justify-content: center;
-  }
-  .toggle-btn-repeat.one::after { display: flex; }
-
-  /* 컨트롤 메인 버튼 그룹 */
-  .player-controls {
-    display: flex; align-items: center; justify-content: center; gap: 24px;
-  }
-
+  /* ── 재생 컨트롤 ── */
+  .player-controls { display: flex; align-items: center; justify-content: center; gap: 24px; }
   .ctrl-btn {
     background: none; border: none; color: var(--text-main);
     cursor: pointer; display: flex; align-items: center; justify-content: center;
@@ -258,7 +163,6 @@
   .ctrl-btn:disabled { opacity: 0.3; cursor: not-allowed; }
   .ctrl-btn:active:not(:disabled) { transform: scale(0.9); }
   .ctrl-btn svg { width: 20px; height: 20px; }
-
   .play-btn {
     width: 52px; height: 52px; border-radius: 50%;
     background: var(--text-main); color: var(--bg-main);
@@ -266,9 +170,58 @@
   }
   .play-btn svg { width: 22px; height: 22px; fill: var(--bg-main); }
 
+  /* ── 유틸 바 ── */
+  .player-utils {
+    display: flex; align-items: center; justify-content: space-between;
+    padding-top: 4px; border-top: 1px solid rgba(255,255,255,0.04);
+  }
+  .util-left { display: flex; align-items: center; gap: 16px; }
+  .toggle-btn { color: var(--text-muted); }
+  .toggle-btn.active { color: var(--accent); filter: drop-shadow(0 0 4px rgba(var(--accent-rgb),0.5)); }
+  .toggle-btn-repeat { position: relative; }
+  .toggle-btn-repeat::after {
+    content: '1'; font-size: 8px; font-weight: bold; position: absolute; top: 1px; right: 0;
+    background: var(--accent); color: var(--bg-main);
+    width: 10px; height: 10px; border-radius: 50%;
+    display: none; align-items: center; justify-content: center;
+  }
+  .toggle-btn-repeat.one::after { display: flex; }
+
+  /* ── 볼륨 컨트롤 ── */
+  .vol-wrap { display: flex; align-items: center; gap: 8px; }
+  .vol-icon { color: var(--text-muted); width: 16px; height: 16px; flex-shrink: 0; }
+
+  .vol-slider-wrap {
+    position: relative; height: 20px; display: flex; align-items: center;
+    width: 80px; cursor: pointer;
+  }
+  .vol-track {
+    position: absolute; left: 0; right: 0; top: 50%; transform: translateY(-50%);
+    height: 4px; border-radius: 2px; background: rgba(255,255,255,0.12); overflow: hidden;
+  }
+  .vol-fill { height: 100%; border-radius: 2px; background: #fff; width: 80%; }
+  .vol-thumb {
+    position: absolute; top: 50%; transform: translate(-50%,-50%);
+    width: 12px; height: 12px; border-radius: 50%; background: #fff;
+    left: 80%; pointer-events: none;
+    opacity: 0; transition: opacity 0.15s;
+  }
+  .vol-slider-wrap:hover .vol-thumb,
+  .vol-slider-wrap.dragging .vol-thumb { opacity: 1; }
+  .vol-input {
+    position: absolute; inset: 0; width: 100%; height: 100%;
+    opacity: 0; cursor: pointer; -webkit-appearance: none; margin: 0;
+  }
+  /* 볼륨 숫자 라벨 */
+  .vol-label {
+    font-size: 12px; color: var(--text-main); font-family: monospace;
+    font-weight: 600; min-width: 28px; text-align: right;
+    transition: color 0.2s;
+  }
+
   @keyframes bounce {
     from { transform: scaleY(0.3); }
-    to { transform: scaleY(1.1); }
+    to   { transform: scaleY(1.1); }
   }
 </style>
 </head>
@@ -285,12 +238,17 @@
   <div class="track-list" id="trackList"></div>
 </main>
 
+<!-- 플레이어 -->
 <div class="player" id="player">
+
+  <!-- 진행바 -->
   <div class="progress-container">
-    <div class="progress-wrap" id="progressWrap">
-      <div class="progress-bg">
-        <div class="progress-fill" id="progressFill"></div>
+    <div class="seek-wrap" id="seekWrap">
+      <div class="seek-track">
+        <div class="seek-fill" id="seekFill"></div>
       </div>
+      <div class="seek-thumb" id="seekThumb"></div>
+      <input type="range" class="seek-input" id="seekInput" min="0" max="100" step="0.05" value="0">
     </div>
     <div class="time-row">
       <span id="timeCurrent">0:00</span>
@@ -298,40 +256,51 @@
     </div>
   </div>
 
+  <!-- 곡 정보 -->
   <div class="player-meta">
     <div class="player-thumb"></div>
     <div class="player-details">
       <div class="player-title" id="playerTitle">재생 중인 곡 없음</div>
-      <div class="player-artist" id="playerArtist">Artist</div>
+      <div class="player-artist" id="playerArtist">—</div>
     </div>
   </div>
 
+  <!-- 재생 컨트롤 -->
   <div class="player-controls">
     <button class="ctrl-btn" id="prevBtn" aria-label="이전 곡">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polygon points="19 20 9 12 19 4 19 20"></polygon><line x1="5" y1="19" x2="5" y2="5"></line></svg>
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polygon points="19 20 9 12 19 4 19 20"/><line x1="5" y1="19" x2="5" y2="5"/></svg>
     </button>
     <button class="ctrl-btn play-btn" id="playBtn" aria-label="재생/일시정지">
-      <svg id="iconPlay" viewBox="0 0 24 24"><polygon points="6,4 20,12 6,20"></polygon></svg>
-      <svg id="iconPause" viewBox="0 0 24 24" style="display:none"><rect x="6" y="4" width="4" height="16" rx="1"></rect><rect x="14" y="4" width="4" height="16" rx="1"></rect></svg>
+      <svg id="iconPlay"  viewBox="0 0 24 24"><polygon points="6,4 20,12 6,20"/></svg>
+      <svg id="iconPause" viewBox="0 0 24 24" style="display:none"><rect x="6"  y="4" width="4" height="16" rx="1"/><rect x="14" y="4" width="4" height="16" rx="1"/></svg>
     </button>
     <button class="ctrl-btn" id="nextBtn" aria-label="다음 곡">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polygon points="5 4 15 12 5 20 5 4"></polygon><line x1="19" y1="5" x2="19" y2="19"></line></svg>
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polygon points="5 4 15 12 5 20 5 4"/><line x1="19" y1="5" x2="19" y2="19"/></svg>
     </button>
   </div>
 
+  <!-- 셔플/반복 + 볼륨 -->
   <div class="player-utils">
     <div class="util-left">
-      <button class="ctrl-btn toggle-btn" id="shuffleBtn" aria-label="셔플 상태 토글">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="16 3 21 3 21 8"></polyline><line x1="4" y1="20" x2="21" y2="3"></line><polyline points="21 16 21 21 16 21"></polyline><line x1="15" y1="15" x2="21" y2="21"></line><line x1="4" y1="4" x2="9" y2="9"></line></svg>
+      <button class="ctrl-btn toggle-btn" id="shuffleBtn" aria-label="셔플">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="16 3 21 3 21 8"/><line x1="4" y1="20" x2="21" y2="3"/><polyline points="21 16 21 21 16 21"/><line x1="15" y1="15" x2="21" y2="21"/><line x1="4" y1="4" x2="9" y2="9"/></svg>
       </button>
-      <button class="ctrl-btn toggle-btn toggle-btn-repeat" id="repeatBtn" aria-label="반복 상태 순환">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="17 1 21 5 17 9"></polyline><path d="M3 11V9a4 4 0 0 1 4-4h14"></path><polyline points="7 23 3 19 7 15"></polyline><path d="M21 13v2a4 4 0 0 1-4 4H3"></path></svg>
+      <button class="ctrl-btn toggle-btn toggle-btn-repeat" id="repeatBtn" aria-label="반복">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="17 1 21 5 17 9"/><path d="M3 11V9a4 4 0 0 1 4-4h14"/><polyline points="7 23 3 19 7 15"/><path d="M21 13v2a4 4 0 0 1-4 4H3"/></svg>
       </button>
     </div>
-    
-    <div class="volume-container">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:16px;height:16px;color:var(--text-muted);"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon><path d="M19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.07"></path></svg>
-      <input type="range" class="volume-slider" id="volumeSlider" min="0" max="1" step="0.05" value="0.8">
+
+    <div class="vol-wrap">
+      <svg class="vol-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/>
+        <path d="M19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.07"/>
+      </svg>
+      <div class="vol-slider-wrap" id="volWrap">
+        <div class="vol-track"><div class="vol-fill" id="volFill"></div></div>
+        <div class="vol-thumb" id="volThumb"></div>
+        <input type="range" class="vol-input" id="volInput" min="0" max="100" step="1" value="80">
+      </div>
+      <span class="vol-label" id="volLabel">80</span>
     </div>
   </div>
 </div>
@@ -339,84 +308,163 @@
 <audio id="audioEl"></audio>
 
 <script>
-  const audio       = document.getElementById('audioEl');
-  const trackList   = document.getElementById('trackList');
-  const playerEl    = document.getElementById('player');
-  const playerTitle = document.getElementById('playerTitle');
-  const playerArtist= document.getElementById('playerArtist');
-  const progressFill= document.getElementById('progressFill');
-  const progressWrap= document.getElementById('progressWrap');
-  const timeCurrent = document.getElementById('timeCurrent');
-  const timeDuration= document.getElementById('timeDuration');
-  const playBtn     = document.getElementById('playBtn');
-  const iconPlay    = document.getElementById('iconPlay');
-  const iconPause   = document.getElementById('iconPause');
-  const prevBtn     = document.getElementById('prevBtn');
-  const nextBtn     = document.getElementById('nextBtn');
-  const shuffleBtn  = document.getElementById('shuffleBtn');
-  const repeatBtn   = document.getElementById('repeatBtn');
-  const volumeSlider= document.getElementById('volumeSlider');
-  const libLabel    = document.getElementById('libLabel');
+  /* ── 요소 참조 ── */
+  const audio        = document.getElementById('audioEl');
+  const trackList    = document.getElementById('trackList');
+  const playerEl     = document.getElementById('player');
+  const playerTitle  = document.getElementById('playerTitle');
+  const playerArtist = document.getElementById('playerArtist');
+  const seekFill     = document.getElementById('seekFill');
+  const seekThumb    = document.getElementById('seekThumb');
+  const seekInput    = document.getElementById('seekInput');
+  const seekWrap     = document.getElementById('seekWrap');
+  const timeCurrent  = document.getElementById('timeCurrent');
+  const timeDuration = document.getElementById('timeDuration');
+  const playBtn      = document.getElementById('playBtn');
+  const iconPlay     = document.getElementById('iconPlay');
+  const iconPause    = document.getElementById('iconPause');
+  const prevBtn      = document.getElementById('prevBtn');
+  const nextBtn      = document.getElementById('nextBtn');
+  const shuffleBtn   = document.getElementById('shuffleBtn');
+  const repeatBtn    = document.getElementById('repeatBtn');
+  const volInput     = document.getElementById('volInput');
+  const volFill      = document.getElementById('volFill');
+  const volThumb     = document.getElementById('volThumb');
+  const volLabel     = document.getElementById('volLabel');
+  const volWrap      = document.getElementById('volWrap');
+  const libLabel     = document.getElementById('libLabel');
 
+  /* ── 상태 ── */
   let tracks = [
     { name: "Heavy Serenade", artist: "엔믹스", url: "https://res.cloudinary.com/dhgv4vln9/video/upload/v1780227297/songs_song1_rpxlmj.mp3" },
-    { name: "노래 제목 2", artist: "아티스트 2", url: "https://raw.githubusercontent.com/본인아이디/저장소이름/main/songs/song2.mp3" }
+    { name: "노래 제목 2",   artist: "아티스트 2", url: "" }
   ];
-
-  let currentIdx = -1;
-  let isPlaying = false;
-  let isShuffle = false;
-  let repeatMode = 0; // 0:안함, 1:전체, 2:한곡
+  let currentIdx  = -1;
+  let isPlaying   = false;
+  let isShuffle   = false;
+  let repeatMode  = 0;       // 0:안함 1:전체 2:한곡
   let shuffleQueue = [];
+  let isSeeking   = false;   // 드래그 중 timeupdate 무시
 
+  /* ═══════════════════════════════════════
+     진행바 (seek)
+  ═══════════════════════════════════════ */
+  function setSeekUI(pct) {
+    seekFill.style.width  = pct + '%';
+    seekThumb.style.left  = pct + '%';
+    seekInput.value       = pct;
+  }
+
+  audio.addEventListener('timeupdate', () => {
+    if (isSeeking || !audio.duration) return;
+    const pct = (audio.currentTime / audio.duration) * 100;
+    setSeekUI(pct);
+    timeCurrent.textContent = fmtTime(audio.currentTime);
+  });
+
+  audio.addEventListener('loadedmetadata', () => {
+    timeDuration.textContent = fmtTime(audio.duration);
+  });
+
+  /* range input 이벤트로 seek */
+  seekInput.addEventListener('mousedown',  () => { isSeeking = true;  seekWrap.classList.add('dragging'); });
+  seekInput.addEventListener('touchstart', () => { isSeeking = true;  seekWrap.classList.add('dragging'); }, { passive: true });
+  seekInput.addEventListener('input', e => {
+    const pct = parseFloat(e.target.value);
+    setSeekUI(pct);
+    if (audio.duration) timeCurrent.textContent = fmtTime(audio.duration * pct / 100);
+  });
+  seekInput.addEventListener('change', e => {
+    if (audio.duration) audio.currentTime = audio.duration * parseFloat(e.target.value) / 100;
+    isSeeking = false;
+    seekWrap.classList.remove('dragging');
+  });
+  seekInput.addEventListener('mouseup',  () => { isSeeking = false; seekWrap.classList.remove('dragging'); });
+  seekInput.addEventListener('touchend', () => { isSeeking = false; seekWrap.classList.remove('dragging'); });
+
+  /* ═══════════════════════════════════════
+     볼륨 슬라이더
+  ═══════════════════════════════════════ */
+  function setVolUI(v) {
+    volFill.style.width  = v + '%';
+    volThumb.style.left  = v + '%';
+    volLabel.textContent = Math.round(v);
+    audio.volume = v / 100;
+  }
+
+  volInput.addEventListener('mousedown',  () => volWrap.classList.add('dragging'));
+  volInput.addEventListener('touchstart', () => volWrap.classList.add('dragging'), { passive: true });
+  volInput.addEventListener('input',  e  => setVolUI(parseFloat(e.target.value)));
+  volInput.addEventListener('mouseup',  () => volWrap.classList.remove('dragging'));
+  volInput.addEventListener('touchend', () => volWrap.classList.remove('dragging'));
+
+  /* ── 초기 볼륨 ── */
+  setVolUI(80);
+
+  /* ═══════════════════════════════════════
+     목록 렌더링
+  ═══════════════════════════════════════ */
   function renderList() {
     libLabel.textContent = `MY PLAYLIST · ${tracks.length}`;
-    trackList.innerHTML = '';
-    
+    trackList.innerHTML  = '';
     tracks.forEach((t, i) => {
+      const active   = i === currentIdx;
+      const playing  = active && isPlaying;
       const item = document.createElement('div');
-      const isCurrent = (i === currentIdx);
-      item.className = 'track-item' + (isCurrent ? ' active' + (isPlaying ? ' playing' : '') : '');
+      item.className = 'track-item' + (active ? ' active' : '') + (playing ? ' playing' : '');
       item.innerHTML = `
         <div class="track-art">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18V5l12-2v13"></path><circle cx="6" cy="18" r="3"></circle><circle cx="18" cy="16" r="3"></circle></svg>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/>
+          </svg>
           <div class="bars"><div class="bar"></div><div class="bar"></div><div class="bar"></div></div>
         </div>
         <div class="track-info">
-          <div class="track-name">${t.name}</div>
-          <div class="track-artist">${t.artist}</div>
-        </div>
-      `;
+          <div class="track-name">${esc(t.name)}</div>
+          <div class="track-artist">${esc(t.artist)}</div>
+        </div>`;
       item.addEventListener('click', () => selectTrack(i));
       trackList.appendChild(item);
     });
   }
 
+  function esc(s) {
+    return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+  }
+
+  /* ═══════════════════════════════════════
+     재생 제어
+  ═══════════════════════════════════════ */
   function selectTrack(idx) {
     if (idx < 0 || idx >= tracks.length) return;
     if (idx === currentIdx) { togglePlay(); return; }
     currentIdx = idx;
-    audio.src = tracks[currentIdx].url;
-    audio.play().catch(()=>{});
+    const t = tracks[idx];
+    audio.src = t.url;
+    audio.play().catch(() => {});
     isPlaying = true;
     playerEl.classList.add('has-track');
-    updatePlayerUI();
+    playerTitle.textContent  = t.name;
+    playerArtist.textContent = t.artist;
+    setSeekUI(0);
+    timeCurrent.textContent  = '0:00';
+    timeDuration.textContent = '0:00';
+    updatePlayIcon();
+    updateNavBtns();
     renderList();
-    
     if (isShuffle && shuffleQueue.length > 0) {
-      const qIdx = shuffleQueue.indexOf(idx);
-      if(qIdx > -1) shuffleQueue.splice(qIdx, 1);
+      const qi = shuffleQueue.indexOf(idx);
+      if (qi > -1) shuffleQueue.splice(qi, 1);
     }
   }
 
   function togglePlay() {
-    if (currentIdx < 0 && tracks.length > 0) { 
-      if(isShuffle) { initiateShuffleQueue(); selectTrack(shuffleQueue.shift()); } 
-      else { selectTrack(0); }
-      return; 
+    if (currentIdx < 0 && tracks.length > 0) {
+      isShuffle ? (initiateShuffleQueue(), selectTrack(shuffleQueue.shift())) : selectTrack(0);
+      return;
     }
-    if (audio.paused) { audio.play().catch(()=>{}); isPlaying = true; } 
-    else { audio.pause(); isPlaying = false; }
+    if (audio.paused) { audio.play().catch(() => {}); isPlaying = true; }
+    else              { audio.pause(); isPlaying = false; }
     updatePlayIcon();
     renderList();
   }
@@ -426,45 +474,23 @@
     iconPause.style.display = isPlaying ? 'block' : 'none';
   }
 
-  function updatePlayerUI() {
-    const t = tracks[currentIdx];
-    playerTitle.textContent = t.name;
-    playerArtist.textContent = t.artist;
-    updatePlayIcon();
-    
-    prevBtn.disabled = (!isShuffle && repeatMode === 0 && currentIdx === 0);
-    nextBtn.disabled = (!isShuffle && repeatMode === 0 && currentIdx === tracks.length - 1 && shuffleQueue.length === 0);
+  function updateNavBtns() {
+    prevBtn.disabled = !isShuffle && repeatMode === 0 && currentIdx === 0;
+    nextBtn.disabled = !isShuffle && repeatMode === 0 && currentIdx === tracks.length - 1 && shuffleQueue.length === 0;
   }
 
-  function initiateShuffleQueue() {
-    shuffleQueue = tracks.map((_, i) => i).filter(i => i !== currentIdx);
-    for (let i = shuffleQueue.length - 1; i > 0; i--) {
-      const j = Math.floor(Math.random() * (i + 1));
-      [shuffleQueue[i], shuffleQueue[j]] = [shuffleQueue[j], shuffleQueue[i]];
-    }
-  }
-
-  shuffleBtn.addEventListener('click', () => {
-    isShuffle = !isShuffle;
-    shuffleBtn.classList.toggle('active', isShuffle);
-    if(isShuffle && currentIdx > -1) initiateShuffleQueue();
-    updatePlayerUI();
-  });
-
-  repeatBtn.addEventListener('click', () => {
-    repeatMode = (repeatMode + 1) % 3;
-    repeatBtn.className = 'ctrl-btn toggle-btn toggle-btn-repeat';
-    if (repeatMode === 1) repeatBtn.classList.add('active');
-    else if (repeatMode === 2) repeatBtn.classList.add('active', 'one');
-    updatePlayerUI();
+  /* 자동 다음 곡 */
+  audio.addEventListener('ended', () => {
+    if (repeatMode === 2) { audio.currentTime = 0; audio.play().catch(() => {}); return; }
+    nextTrack();
   });
 
   function nextTrack() {
-    if (repeatMode === 2) { audio.currentTime = 0; audio.play().catch(()=>{}); return; }
+    if (repeatMode === 2) { audio.currentTime = 0; audio.play().catch(() => {}); return; }
     if (isShuffle) {
       if (shuffleQueue.length === 0) {
-        if (repeatMode === 1) { initiateShuffleQueue(); if(shuffleQueue.length > 0) { selectTrack(shuffleQueue.shift()); return; } }
-        isPlaying = false; renderList(); updatePlayIcon(); return;
+        if (repeatMode === 1) { initiateShuffleQueue(); if (shuffleQueue.length > 0) { selectTrack(shuffleQueue.shift()); return; } }
+        isPlaying = false; updatePlayIcon(); renderList(); return;
       }
       selectTrack(shuffleQueue.shift());
     } else {
@@ -475,48 +501,48 @@
 
   function prevTrack() {
     if (audio.currentTime > 4) { audio.currentTime = 0; return; }
-    if (isShuffle) { initiateShuffleQueue(); if(shuffleQueue.length > 0) selectTrack(shuffleQueue.shift()); } 
+    if (isShuffle) { initiateShuffleQueue(); if (shuffleQueue.length > 0) selectTrack(shuffleQueue.shift()); }
     else {
       if (currentIdx > 0) selectTrack(currentIdx - 1);
       else if (repeatMode === 1) selectTrack(tracks.length - 1);
     }
   }
 
+  function initiateShuffleQueue() {
+    shuffleQueue = tracks.map((_, i) => i).filter(i => i !== currentIdx);
+    for (let i = shuffleQueue.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [shuffleQueue[i], shuffleQueue[j]] = [shuffleQueue[j], shuffleQueue[i]];
+    }
+  }
+
+  /* ── 버튼 이벤트 ── */
   playBtn.addEventListener('click', togglePlay);
   prevBtn.addEventListener('click', prevTrack);
   nextBtn.addEventListener('click', nextTrack);
 
-  audio.addEventListener('timeupdate', () => {
-    if (!audio.duration) return;
-    const pct = (audio.currentTime / audio.duration) * 100;
-    progressFill.style.width = pct + '%';
-    timeCurrent.textContent = fmtTime(audio.currentTime);
+  shuffleBtn.addEventListener('click', () => {
+    isShuffle = !isShuffle;
+    shuffleBtn.classList.toggle('active', isShuffle);
+    if (isShuffle && currentIdx > -1) initiateShuffleQueue();
+    updateNavBtns();
   });
 
-  audio.addEventListener('loadedmetadata', () => { timeDuration.textContent = fmtTime(audio.duration); });
-  audio.addEventListener('ended', () => { if (repeatMode === 2) { audio.currentTime = 0; audio.play().catch(()=>{}); } else { nextTrack(); } });
-
-  progressWrap.addEventListener('click', e => {
-    if (!audio.duration) return;
-    const rect = progressWrap.getBoundingClientRect();
-    const pct  = (e.clientX - rect.left) / rect.width;
-    audio.currentTime = pct * audio.duration;
+  repeatBtn.addEventListener('click', () => {
+    repeatMode = (repeatMode + 1) % 3;
+    repeatBtn.className = 'ctrl-btn toggle-btn toggle-btn-repeat';
+    if (repeatMode === 1) repeatBtn.classList.add('active');
+    if (repeatMode === 2) repeatBtn.classList.add('active', 'one');
+    updateNavBtns();
   });
 
-  /* 🔊 100% 볼륨 조절 리스너 연동 완료 */
-  volumeSlider.addEventListener('input', (e) => {
-    audio.volume = e.target.value;
-  });
-
+  /* ── 유틸 ── */
   function fmtTime(s) {
     if (!isFinite(s)) return '0:00';
-    const m = Math.floor(s / 60);
-    const sec = Math.floor(s % 60).toString().padStart(2, '0');
-    return `${m}:${sec}`;
+    return Math.floor(s / 60) + ':' + Math.floor(s % 60).toString().padStart(2, '0');
   }
 
-  // 초기 설정
-  audio.volume = 0.8;
+  /* ── 초기 렌더 ── */
   renderList();
 </script>
 </body>
