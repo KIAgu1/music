@@ -3,406 +3,262 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<title>나의 음악</title>
+<title>SOUNDROOM</title>
 <style>
-  @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700&family=DM+Mono:wght@400;500&display=swap');
+  @import url('https://fonts.googleapis.com/css2?family=Pretendard:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@500;600;700&display=swap');
 
   :root {
-    --bg-deep:    #0a0a0f;
-    --bg-card:    #111118;
-    --bg-glass:   rgba(255,255,255,0.04);
-    --border:     rgba(255,255,255,0.07);
-    --accent:     #a78bfa;
-    --accent2:    #60a5fa;
-    --accent-glow: rgba(167,139,250,0.25);
-    --text-hi:    #f1f0ff;
-    --text-mid:   #9491b4;
-    --text-lo:    #4e4b6a;
-    --player-h:   148px;
-    --radius:     16px;
+    --bg-main:     #080710;
+    --bg-card:     rgba(255, 255, 255, 0.03);
+    --bg-player:   rgba(13, 12, 22, 0.85);
+    --border:      rgba(255, 255, 255, 0.05);
+    --accent:      #bd93f9;
+    --accent-rgb:  189, 147, 249;
+    --text-main:   #f8f8f2;
+    --text-muted:  #6272a4;
+    --radius-lg:   24px;
+    --radius-md:   16px;
   }
 
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
   html, body {
     height: 100%;
-    background: var(--bg-deep);
-    color: var(--text-hi);
-    font-family: 'Noto Sans KR', sans-serif;
+    background: var(--bg-main);
+    color: var(--text-main);
+    font-family: 'Pretendard', sans-serif;
     -webkit-font-smoothing: antialiased;
     overscroll-behavior: none;
-  }
-
-  /* ── 배경 노이즈 텍스처 ── */
-  body::before {
-    content: '';
-    position: fixed; inset: 0;
-    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.03'/%3E%3C/svg%3E");
-    pointer-events: none; z-index: 0;
   }
 
   /* ── 헤더 ── */
   header {
     position: fixed; top: 0; left: 0; right: 0;
     z-index: 100;
-    padding: 20px 20px 16px;
-    background: linear-gradient(to bottom, var(--bg-deep) 70%, transparent);
+    padding: 32px 24px 20px;
+    background: linear-gradient(to bottom, var(--bg-main) 60%, transparent);
   }
 
   .header-inner {
     display: flex;
-    align-items: center;
-    justify-content: space-between;
+    flex-direction: column;
+    gap: 4px;
   }
 
-  .title-group h1 {
-    font-size: 22px;
+  .header-inner h1 {
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    font-size: 28px;
     font-weight: 700;
     letter-spacing: -0.5px;
-    color: var(--text-hi);
+    background: linear-gradient(135deg, #fff 0%, var(--text-muted) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
   }
 
-  .title-group p {
-    font-size: 11px;
-    color: var(--text-lo);
-    letter-spacing: 0.04em;
-    margin-top: 2px;
-    font-family: 'DM Mono', monospace;
-  }
-
-  /* ── 업로드 버튼 ── */
-  .upload-btn {
-    position: relative;
-    display: flex; align-items: center; gap: 7px;
-    padding: 9px 16px;
-    border-radius: 100px;
-    border: 1px solid var(--accent);
-    background: var(--accent-glow);
+  .header-inner p {
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    font-size: 12px;
+    font-weight: 600;
     color: var(--accent);
-    font-size: 13px;
-    font-weight: 500;
-    font-family: 'Noto Sans KR', sans-serif;
-    cursor: pointer;
-    transition: background 0.2s, box-shadow 0.2s, transform 0.1s;
-    white-space: nowrap;
-    -webkit-tap-highlight-color: transparent;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
   }
-  .upload-btn:active { transform: scale(0.96); }
-  .upload-btn:hover { background: rgba(167,139,250,0.18); box-shadow: 0 0 20px var(--accent-glow); }
-  .upload-btn svg { flex-shrink: 0; }
-  #fileInput { display: none; }
 
-  /* ── 메인 스크롤 영역 ── */
+  /* ── 메인 콘텐츠 ── */
   main {
     position: fixed; inset: 0;
     overflow-y: auto;
-    padding-top: 84px;
-    padding-bottom: calc(var(--player-h) + 16px);
-    padding-left: 16px; padding-right: 16px;
+    padding-top: 110px;
+    padding-bottom: 180px;
+    padding-left: 24px; padding-right: 24px;
     -webkit-overflow-scrolling: touch;
     z-index: 1;
   }
 
-  /* ── 빈 상태 ── */
-  .empty-state {
-    display: flex; flex-direction: column; align-items: center; justify-content: center;
-    gap: 14px;
-    height: 100%;
-    min-height: 260px;
-    color: var(--text-lo);
-    text-align: center;
-    animation: fadeUp 0.5s ease both;
+  /* 곡 목록 */
+  .track-list { 
+    display: flex; 
+    flex-direction: column; 
+    gap: 12px; 
   }
-  .empty-state .icon-ring {
-    width: 72px; height: 72px;
-    border-radius: 50%;
-    border: 1.5px dashed var(--text-lo);
-    display: flex; align-items: center; justify-content: center;
-    opacity: 0.5;
-  }
-  .empty-state p { font-size: 13px; line-height: 1.6; }
-
-  /* ── 트랙 카운트 ── */
-  .track-count {
-    font-size: 11px;
-    color: var(--text-lo);
-    font-family: 'DM Mono', monospace;
-    letter-spacing: 0.04em;
-    margin-bottom: 12px;
-    padding-left: 4px;
-  }
-
-  /* ── 곡 목록 ── */
-  .track-list { display: flex; flex-direction: column; gap: 6px; }
 
   .track-item {
-    display: flex; align-items: center; gap: 14px;
-    padding: 14px 16px;
-    border-radius: var(--radius);
+    display: flex; align-items: center; gap: 16px;
+    padding: 12px;
+    border-radius: var(--radius-md);
+    background: var(--bg-card);
     border: 1px solid var(--border);
-    background: var(--bg-glass);
     cursor: pointer;
-    transition: background 0.15s, border-color 0.15s, transform 0.1s;
+    transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
     -webkit-tap-highlight-color: transparent;
-    animation: fadeUp 0.3s ease both;
-    position: relative;
-    overflow: hidden;
   }
-  .track-item::before {
-    content: '';
-    position: absolute; inset: 0;
-    background: linear-gradient(135deg, rgba(167,139,250,0.06) 0%, transparent 60%);
-    opacity: 0; transition: opacity 0.2s;
-  }
-  .track-item:active { transform: scale(0.985); }
-  .track-item:hover { border-color: rgba(167,139,250,0.2); }
-  .track-item:hover::before { opacity: 1; }
+  
+  .track-item:active { transform: scale(0.98); }
+  
   .track-item.active {
-    border-color: rgba(167,139,250,0.4);
-    background: rgba(167,139,250,0.08);
+    background: rgba(var(--accent-rgb), 0.1);
+    border-color: rgba(var(--accent-rgb), 0.3);
   }
-  .track-item.active::before { opacity: 1; }
 
-  /* 앨범아트 자리 */
+  /* 앨범아트 모양 가상 커버 */
   .track-art {
-    width: 44px; height: 44px; flex-shrink: 0;
-    border-radius: 10px;
-    background: linear-gradient(135deg, #1e1b3a 0%, #0f0e1a 100%);
+    width: 48px; height: 48px; flex-shrink: 0;
+    border-radius: 12px;
+    background: linear-gradient(135deg, #282a36 0%, #111217 100%);
     display: flex; align-items: center; justify-content: center;
     position: relative; overflow: hidden;
   }
-  .track-art .note-icon { opacity: 0.4; transition: opacity 0.2s; }
-  .track-item.active .track-art .note-icon { opacity: 0; }
-  .track-item.active .track-art { background: linear-gradient(135deg, #2d1b69 0%, #1a0f4a 100%); }
+  
+  .track-art svg { color: var(--text-muted); width: 20px; height: 20px; }
 
-  /* 재생 중 파형 애니메이션 */
+  /* 미니 이퀄라이저 애니메이션 */
   .bars {
     display: none;
     position: absolute; inset: 0;
-    align-items: center; justify-content: center; gap: 2.5px;
+    align-items: center; justify-content: center; gap: 3px;
+    background: rgba(0, 0, 0, 0.5);
   }
-  .track-item.active .bars { display: flex; }
   .track-item.playing .bars { display: flex; }
   .bar {
-    width: 3px; border-radius: 2px;
+    width: 3px; height: 4px; border-radius: 2px;
     background: var(--accent);
-    animation: bounce 0.8s ease-in-out infinite;
+    animation: bounce 0.6s ease-in-out infinite alternate;
   }
-  .bar:nth-child(1) { height: 10px; animation-delay: 0s; }
-  .bar:nth-child(2) { height: 18px; animation-delay: 0.15s; }
-  .bar:nth-child(3) { height: 13px; animation-delay: 0.3s; }
-  .bar:nth-child(4) { height: 20px; animation-delay: 0.1s; }
-
-  .track-item.paused .bar { animation-play-state: paused; }
+  .bar:nth-child(1) { animation-delay: 0.1s; }
+  .bar:nth-child(2) { animation-delay: 0.3s; }
+  .bar:nth-child(3) { animation-delay: 0.5s; }
 
   /* 트랙 정보 */
   .track-info { flex: 1; min-width: 0; }
   .track-name {
-    font-size: 14px; font-weight: 500;
-    color: var(--text-hi);
+    font-size: 15px; font-weight: 600;
+    color: var(--text-main);
     white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
   }
   .track-item.active .track-name { color: var(--accent); }
-  .track-meta {
-    font-size: 11px; color: var(--text-lo);
+  .track-artist {
+    font-size: 12px; color: var(--text-muted);
     margin-top: 3px;
-    font-family: 'DM Mono', monospace;
   }
 
-  /* 재생 번호 */
-  .track-num {
-    font-size: 12px; color: var(--text-lo);
-    font-family: 'DM Mono', monospace;
-    min-width: 20px; text-align: right;
-  }
-  .track-item.active .track-num { display: none; }
-
-  /* ── 하단 플레이어 ── */
+  /* ── 하단 고정 플레이어 ── */
   .player {
-    position: fixed; bottom: 0; left: 0; right: 0;
+    position: fixed; bottom: 24px; left: 24px; right: 24px;
     z-index: 200;
-    height: var(--player-h);
-    padding: 0 20px 20px;
-    display: flex; flex-direction: column; justify-content: flex-end;
-    gap: 10px;
-    background: linear-gradient(to top, var(--bg-deep) 70%, transparent);
-  }
-
-  .player-card {
-    background: var(--bg-card);
+    background: var(--bg-player);
     border: 1px solid var(--border);
-    border-radius: 20px;
-    padding: 14px 18px;
+    border-radius: var(--radius-lg);
+    padding: 20px;
+    box-shadow: 0 12px 40px rgba(0,0,0,0.7);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    display: flex; flex-direction: column; gap: 16px;
+    transform: translateY(120px);
+    transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.1);
+  }
+  .player.has-track { transform: translateY(0); }
+
+  .player-meta {
     display: flex; align-items: center; gap: 14px;
-    box-shadow: 0 -4px 40px rgba(0,0,0,0.6);
-    backdrop-filter: blur(12px);
   }
 
   .player-thumb {
-    width: 40px; height: 40px; flex-shrink: 0;
-    border-radius: 10px;
-    background: linear-gradient(135deg, #1e1b3a 0%, #0f0e1a 100%);
-    display: flex; align-items: center; justify-content: center;
-    position: relative; overflow: hidden;
-  }
-  .player.has-track .player-thumb {
-    background: linear-gradient(135deg, #2d1b69 0%, #1a0f4a 100%);
+    width: 52px; height: 52px; flex-shrink: 0;
+    border-radius: var(--radius-md);
+    background: linear-gradient(135deg, var(--accent) 0%, #ff79c6 100%);
+    box-shadow: 0 4px 12px rgba(var(--accent-rgb), 0.3);
   }
 
-  .player-info { flex: 1; min-width: 0; }
+  .player-details { flex: 1; min-width: 0; }
   .player-title {
-    font-size: 13px; font-weight: 500;
-    color: var(--text-hi);
+    font-size: 16px; font-weight: 700; color: var(--text-main);
     white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
   }
-  .player-sub {
-    font-size: 11px; color: var(--text-lo);
-    font-family: 'DM Mono', monospace;
-    margin-top: 2px;
+  .player-artist { font-size: 13px; color: var(--text-muted); margin-top: 2px; }
+
+  /* 컨트롤 버튼 그룹 */
+  .player-controls {
+    display: flex; align-items: center; justify-content: center; gap: 24px;
   }
 
-  /* 진행바 컨테이너 */
+  .ctrl-btn {
+    background: none; border: none; color: var(--text-main);
+    cursor: pointer; display: flex; align-items: center; justify-content: center;
+    -webkit-tap-highlight-color: transparent; transition: transform 0.1s;
+  }
+  .ctrl-btn:active { transform: scale(0.9); }
+  .ctrl-btn svg { width: 22px; height: 22px; }
+
+  .play-btn {
+    width: 56px; height: 56px; border-radius: 50%;
+    background: var(--text-main); color: var(--bg-main);
+    box-shadow: 0 8px 20px rgba(255,255,255,0.1);
+  }
+  .play-btn svg { width: 24px; height: 24px; fill: var(--bg-main); }
+
+  /* 프로그레스 바 */
+  .progress-container { display: flex; flex-direction: column; gap: 6px; }
   .progress-wrap {
-    margin: 6px 0 0;
-    height: 3px; border-radius: 2px;
-    background: var(--border);
+    height: 4px; border-radius: 2px; background: rgba(255,255,255,0.1);
     position: relative; cursor: pointer;
   }
   .progress-fill {
-    height: 100%; border-radius: 2px;
-    background: linear-gradient(to right, var(--accent), var(--accent2));
-    width: 0%;
-    transition: width 0.1s linear;
+    height: 100%; border-radius: 2px; background: var(--accent); width: 0%;
   }
-  .progress-thumb {
-    position: absolute; top: 50%; transform: translate(-50%, -50%);
-    width: 10px; height: 10px; border-radius: 50%;
-    background: var(--accent);
-    left: 0%;
-    box-shadow: 0 0 6px var(--accent-glow);
-    transition: left 0.1s linear;
-    display: none;
-  }
-  .progress-wrap:hover .progress-thumb,
-  .progress-wrap:active .progress-thumb { display: block; }
-
-  /* 컨트롤 */
-  .ctrl-btn {
-    width: 40px; height: 40px; flex-shrink: 0;
-    border-radius: 50%;
-    border: none; background: none;
-    display: flex; align-items: center; justify-content: center;
-    cursor: pointer;
-    color: var(--text-hi);
-    -webkit-tap-highlight-color: transparent;
-    transition: background 0.15s, transform 0.1s;
-  }
-  .ctrl-btn:active { transform: scale(0.9); }
-
-  .play-btn {
-    width: 44px; height: 44px;
-    border-radius: 50%;
-    border: none;
-    background: linear-gradient(135deg, var(--accent), var(--accent2));
-    display: flex; align-items: center; justify-content: center;
-    cursor: pointer;
-    -webkit-tap-highlight-color: transparent;
-    transition: transform 0.1s, box-shadow 0.2s;
-    box-shadow: 0 0 16px var(--accent-glow);
-    flex-shrink: 0;
-  }
-  .play-btn:active { transform: scale(0.9); }
-  .play-btn:hover { box-shadow: 0 0 24px var(--accent-glow); }
-
-  /* ── 유틸 ── */
-  @keyframes fadeUp {
-    from { opacity: 0; transform: translateY(12px); }
-    to   { opacity: 1; transform: translateY(0); }
-  }
-  @keyframes bounce {
-    0%, 100% { transform: scaleY(0.5); }
-    50%       { transform: scaleY(1); }
-  }
-
-  /* 스크롤바 */
-  main::-webkit-scrollbar { width: 3px; }
-  main::-webkit-scrollbar-track { background: transparent; }
-  main::-webkit-scrollbar-thumb { background: var(--text-lo); border-radius: 2px; }
-
-  /* 진행바 시간 라벨 */
   .time-row {
     display: flex; justify-content: space-between;
-    font-size: 10px; color: var(--text-lo);
-    font-family: 'DM Mono', monospace;
-    margin-top: 4px;
+    font-family: 'Plus Jakarta Sans', sans-serif; font-size: 11px; color: var(--text-muted);
+    font-weight: 500;
+  }
+
+  @keyframes bounce {
+    from { transform: scaleY(0.3); }
+    to { transform: scaleY(1.1); }
   }
 </style>
 </head>
 <body>
 
-<!-- 헤더 -->
 <header>
   <div class="header-inner">
-    <div class="title-group">
-      <h1>나의 음악 목록</h1>
-      <p id="libLabel">LIBRARY</p>
-    </div>
-    <label class="upload-btn" for="fileInput">
-      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-        <path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/>
-        <polyline points="17 8 12 3 7 8"/>
-        <line x1="12" y1="3" x2="12" y2="15"/>
-      </svg>
-      파일 추가
-    </label>
-    <input type="file" id="fileInput" accept="audio/*" multiple>
+    <p id="libLabel">MY PLAYLIST</p>
+    <h1>SOUNDROOM</h1>
   </div>
 </header>
 
-<!-- 메인 목록 -->
-<main id="mainScroll">
-  <div class="empty-state" id="emptyState">
-    <div class="icon-ring">
-      <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-        <path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/>
-      </svg>
-    </div>
-    <p>아직 음악이 없어요.<br>상단의 <strong>파일 추가</strong> 버튼으로<br>MP3 파일을 불러오세요.</p>
-  </div>
-  <p class="track-count" id="trackCount" style="display:none"></p>
+<main>
   <div class="track-list" id="trackList"></div>
 </main>
 
-<!-- 하단 플레이어 -->
 <div class="player" id="player">
-  <div class="player-card">
-    <div class="player-thumb" id="playerThumb">
-      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="opacity:.3">
-        <path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/>
-      </svg>
+  <div class="progress-container">
+    <div class="progress-wrap" id="progressWrap">
+      <div class="progress-fill" id="progressFill"></div>
     </div>
+    <div class="time-row">
+      <span id="timeCurrent">0:00</span>
+      <span id="timeDuration">0:00</span>
+    </div>
+  </div>
 
-    <div class="player-info">
+  <div class="player-meta">
+    <div class="player-thumb"></div>
+    <div class="player-details">
       <div class="player-title" id="playerTitle">재생 중인 곡 없음</div>
-      <div class="player-sub" id="playerSub">—</div>
-      <div class="progress-wrap" id="progressWrap">
-        <div class="progress-fill" id="progressFill"></div>
-        <div class="progress-thumb" id="progressThumb"></div>
-      </div>
-      <div class="time-row">
-        <span id="timeCurrent">0:00</span>
-        <span id="timeDuration">0:00</span>
-      </div>
+      <div class="player-artist" id="playerArtist">Artist</div>
     </div>
+  </div>
 
-    <button class="play-btn" id="playBtn" aria-label="재생/일시정지">
-      <svg id="iconPlay" width="18" height="18" viewBox="0 0 24 24" fill="white">
-        <polygon points="5,3 19,12 5,21"/>
-      </svg>
-      <svg id="iconPause" width="18" height="18" viewBox="0 0 24 24" fill="white" style="display:none">
-        <rect x="6" y="4" width="4" height="16" rx="1"/>
-        <rect x="14" y="4" width="4" height="16" rx="1"/>
-      </svg>
+  <div class="player-controls">
+    <button class="ctrl-btn" id="prevBtn" aria-label="이전 곡">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="19 20 9 12 19 4 19 20"></polygon><line x1="5" y1="19" x2="5" y2="5"></line></svg>
+    </button>
+    <button class="ctrl-btn play-btn" id="playBtn" aria-label="재생/일시정지">
+      <svg id="iconPlay" viewBox="0 0 24 24"><polygon points="5,3 19,12 5,21"></polygon></svg>
+      <svg id="iconPause" viewBox="0 0 24 24" style="display:none"><rect x="6" y="4" width="4" height="16"></rect><rect x="14" y="4" width="4" height="16"></rect></svg>
+    </button>
+    <button class="ctrl-btn" id="nextBtn" aria-label="다음 곡">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="5 4 15 12 5 20 5 4"></polygon><line x1="19" y1="5" x2="19" y2="19"></line></svg>
     </button>
   </div>
 </div>
@@ -410,111 +266,70 @@
 <audio id="audioEl"></audio>
 
 <script>
-  const audio      = document.getElementById('audioEl');
-  const fileInput  = document.getElementById('fileInput');
-  const trackList  = document.getElementById('trackList');
-  const emptyState = document.getElementById('emptyState');
-  const trackCount = document.getElementById('trackCount');
-  const playerEl   = document.getElementById('player');
-  const playerTitle= document.getElementById('playerTitle');
-  const playerSub  = document.getElementById('playerSub');
+  const audio       = document.getElementById('audioEl');
+  const trackList   = document.getElementById('trackList');
+  const playerEl    = document.getElementById('player');
+  const playerTitle = document.getElementById('playerTitle');
+  const playerArtist= document.getElementById('playerArtist');
   const progressFill= document.getElementById('progressFill');
-  const progressThumb= document.getElementById('progressThumb');
   const progressWrap= document.getElementById('progressWrap');
-  const timeCurrent= document.getElementById('timeCurrent');
+  const timeCurrent = document.getElementById('timeCurrent');
   const timeDuration= document.getElementById('timeDuration');
-  const playBtn    = document.getElementById('playBtn');
-  const iconPlay   = document.getElementById('iconPlay');
-  const iconPause  = document.getElementById('iconPause');
-  const libLabel   = document.getElementById('libLabel');
+  const playBtn     = document.getElementById('playBtn');
+  const iconPlay    = document.getElementById('iconPlay');
+  const iconPause   = document.getElementById('iconPause');
+  const prevBtn     = document.getElementById('prevBtn');
+  const nextBtn     = document.getElementById('nextBtn');
+  const libLabel    = document.getElementById('libLabel');
 
-  let tracks = [];       // {name, url, size}
+  // ★ 여기에 내 음악 주소들을 넣으세요! ★
+  let tracks = [
+    { name: "노래 제목 1", artist: "아티스트 1", url: "https://raw.githubusercontent.com/본인아이디/저장소이름/main/songs/song1.mp3" },
+    { name: "노래 제목 2", artist: "아티스트 2", url: "https://raw.githubusercontent.com/본인아이디/저장소이름/main/songs/song2.mp3" }
+  ];
+
   let currentIdx = -1;
   let isPlaying = false;
 
-  /* ── 파일 선택 ── */
-  fileInput.addEventListener('change', e => {
-    const files = Array.from(e.target.files);
-    files.forEach(f => {
-      if (!f.type.startsWith('audio/')) return;
-      const url = URL.createObjectURL(f);
-      const sizeMB = (f.size / 1048576).toFixed(1);
-      tracks.push({ name: cleanName(f.name), url, sizeMB });
-    });
-    fileInput.value = '';
-    renderList();
-  });
-
-  function cleanName(fn) {
-    return fn.replace(/\.[^/.]+$/, '');   // 확장자 제거
-  }
-
-  /* ── 목록 렌더링 ── */
   function renderList() {
-    if (tracks.length === 0) {
-      emptyState.style.display = 'flex';
-      trackCount.style.display = 'none';
-      trackList.innerHTML = '';
-      return;
-    }
-    emptyState.style.display = 'none';
-    trackCount.style.display = 'block';
-    trackCount.textContent = `${tracks.length}곡`;
-    libLabel.textContent = `LIBRARY · ${tracks.length}`;
-
+    libLabel.textContent = `MY PLAYLIST · ${tracks.length}`;
     trackList.innerHTML = '';
+    
     tracks.forEach((t, i) => {
       const item = document.createElement('div');
-      item.className = 'track-item' + (i === currentIdx ? ' active' + (isPlaying ? ' playing' : ' paused') : '');
-      item.dataset.idx = i;
-      item.style.animationDelay = `${i * 0.04}s`;
+      item.className = 'track-item' + (i === currentIdx ? ' active' + (isPlaying ? ' playing' : '') : '');
       item.innerHTML = `
         <div class="track-art">
-          <svg class="note-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-            <path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/>
-          </svg>
-          <div class="bars">
-            <div class="bar"></div><div class="bar"></div>
-            <div class="bar"></div><div class="bar"></div>
-          </div>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18V5l12-2v13"></path><circle cx="6" cy="18" r="3"></circle><circle cx="18" cy="16" r="3"></circle></svg>
+          <div class="bars"><div class="bar"></div><div class="bar"></div><div class="bar"></div></div>
         </div>
         <div class="track-info">
-          <div class="track-name">${escHtml(t.name)}</div>
-          <div class="track-meta">${t.sizeMB} MB</div>
+          <div class="track-name">${t.name}</div>
+          <div class="track-artist">${t.artist}</div>
         </div>
-        <div class="track-num">${String(i + 1).padStart(2, '0')}</div>
       `;
       item.addEventListener('click', () => selectTrack(i));
       trackList.appendChild(item);
     });
   }
 
-  function escHtml(s) {
-    return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
-  }
-
-  /* ── 트랙 선택 ── */
   function selectTrack(idx) {
-    if (idx === currentIdx && audio.src) {
+    if (idx < 0 || idx >= tracks.length) return;
+    if (idx === currentIdx) {
       togglePlay();
       return;
     }
     currentIdx = idx;
-    const t = tracks[idx];
-    audio.src = t.url;
+    audio.src = tracks[currentIdx].url;
     audio.play().catch(()=>{});
     isPlaying = true;
-    updatePlayerUI(t);
+    playerEl.classList.add('has-track');
+    updatePlayerUI();
     renderList();
   }
 
-  /* ── 재생/일시정지 ── */
-  playBtn.addEventListener('click', () => {
-    if (currentIdx < 0 && tracks.length > 0) { selectTrack(0); return; }
-    togglePlay();
-  });
-
   function togglePlay() {
+    if (currentIdx < 0 && tracks.length > 0) { selectTrack(0); return; }
     if (audio.paused) {
       audio.play().catch(()=>{});
       isPlaying = true;
@@ -523,7 +338,7 @@
       isPlaying = false;
     }
     updatePlayIcon();
-    refreshActiveItem();
+    renderList();
   }
 
   function updatePlayIcon() {
@@ -531,20 +346,21 @@
     iconPause.style.display = isPlaying ? 'block' : 'none';
   }
 
-  /* ── 플레이어 UI ── */
-  function updatePlayerUI(t) {
+  function updatePlayerUI() {
+    const t = tracks[currentIdx];
     playerTitle.textContent = t.name;
-    playerSub.textContent   = t.sizeMB + ' MB';
-    playerEl.classList.add('has-track');
+    playerArtist.textContent = t.artist;
     updatePlayIcon();
   }
 
-  /* ── 진행바 ── */
+  playBtn.addEventListener('click', togglePlay);
+  prevBtn.addEventListener('click', () => { if(currentIdx > 0) selectTrack(currentIdx - 1); });
+  nextBtn.addEventListener('click', () => { if(currentIdx < tracks.length - 1) selectTrack(currentIdx + 1); });
+
   audio.addEventListener('timeupdate', () => {
     if (!audio.duration) return;
     const pct = (audio.currentTime / audio.duration) * 100;
     progressFill.style.width = pct + '%';
-    progressThumb.style.left  = pct + '%';
     timeCurrent.textContent = fmtTime(audio.currentTime);
   });
 
@@ -553,17 +369,10 @@
   });
 
   audio.addEventListener('ended', () => {
-    // 다음 곡 자동 재생
-    if (currentIdx < tracks.length - 1) {
-      selectTrack(currentIdx + 1);
-    } else {
-      isPlaying = false;
-      updatePlayIcon();
-      refreshActiveItem();
-    }
+    if (currentIdx < tracks.length - 1) selectTrack(currentIdx + 1);
+    else { isPlaying = false; renderList(); updatePlayIcon(); }
   });
 
-  /* 진행바 클릭 */
   progressWrap.addEventListener('click', e => {
     if (!audio.duration) return;
     const rect = progressWrap.getBoundingClientRect();
@@ -571,24 +380,6 @@
     audio.currentTime = pct * audio.duration;
   });
 
-  /* 진행바 드래그 */
-  let dragging = false;
-  progressWrap.addEventListener('pointerdown', e => {
-    dragging = true;
-    progressWrap.setPointerCapture(e.pointerId);
-    seekTo(e);
-  });
-  progressWrap.addEventListener('pointermove', e => { if (dragging) seekTo(e); });
-  progressWrap.addEventListener('pointerup', () => { dragging = false; });
-
-  function seekTo(e) {
-    if (!audio.duration) return;
-    const rect = progressWrap.getBoundingClientRect();
-    const pct  = Math.max(0, Math.min(1, (e.clientX - rect.left) / rect.width));
-    audio.currentTime = pct * audio.duration;
-  }
-
-  /* ── 헬퍼 ── */
   function fmtTime(s) {
     if (!isFinite(s)) return '0:00';
     const m = Math.floor(s / 60);
@@ -596,16 +387,8 @@
     return `${m}:${sec}`;
   }
 
-  function refreshActiveItem() {
-    document.querySelectorAll('.track-item').forEach((el, i) => {
-      el.classList.toggle('active',   i === currentIdx);
-      el.classList.toggle('playing',  i === currentIdx &&  isPlaying);
-      el.classList.toggle('paused',   i === currentIdx && !isPlaying);
-    });
-  }
-
-  audio.addEventListener('play',  () => { isPlaying = true;  updatePlayIcon(); refreshActiveItem(); });
-  audio.addEventListener('pause', () => { isPlaying = false; updatePlayIcon(); refreshActiveItem(); });
+  // 초기 실행
+  renderList();
 </script>
 </body>
 </html>
