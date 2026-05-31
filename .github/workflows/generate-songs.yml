@@ -1,0 +1,42 @@
+name: Generate Songs List
+
+on:
+  push:
+    paths:
+      - 'music/**'
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Generate songs.json
+        run: |
+          echo "[" > songs.json
+
+          first=true
+
+          for file in music/*.mp3; do
+            name=$(basename "$file" .mp3)
+
+            if [ "$first" = true ]; then
+              first=false
+            else
+              echo "," >> songs.json
+            fi
+
+            echo "{\"name\":\"$name\",\"artist\":\"Unknown\",\"url\":\"./$file\"}" >> songs.json
+          done
+
+          echo "]" >> songs.json
+
+      - name: Commit
+        run: |
+          git config user.name github-actions
+          git config user.email github-actions@github.com
+
+          git add songs.json
+          git commit -m "Update songs list" || exit 0
+          git push
